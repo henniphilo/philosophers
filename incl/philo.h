@@ -6,7 +6,7 @@
 /*   By: hwiemann <hwiemann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 11:28:02 by hwiemann          #+#    #+#             */
-/*   Updated: 2024/05/31 11:22:51 by hwiemann         ###   ########.fr       */
+/*   Updated: 2024/05/31 16:44:55 by hwiemann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ typedef struct {
 
 
 void		*ft_philo(void *arg);
+void		*monitor_death(void *arg);
 long long	the_time();
 int			ft_atoi(const char *str);
 int			create_philos(pthread_t	*philosoph, philo_args *args);

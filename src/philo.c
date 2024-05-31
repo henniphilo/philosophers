@@ -6,7 +6,7 @@
 /*   By: hwiemann <hwiemann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 11:27:37 by hwiemann          #+#    #+#             */
-/*   Updated: 2024/05/31 13:44:42 by hwiemann         ###   ########.fr       */
+/*   Updated: 2024/05/31 16:48:40 by hwiemann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ int	main(int argc, char **argv)
 
 		pthread_mutex_t	forks[philo_num];
 		pthread_t		philosophers[philo_num];
+		pthread_t		monitor;
 		pthread_mutex_t	write_lock;
 		philo_args		*args;
 
@@ -32,6 +33,12 @@ int	main(int argc, char **argv)
 		fork_mutex_init(forks, args);
 		if (create_philos(philosophers, args) != 0)
 		{
+			free(args);
+			return (1);
+		}
+		if (pthread_create(&monitor, NULL, monitor_death, args) != 0)
+		{
+			printf("Error in creating death monitor thread\n");
 			free(args);
 			return (1);
 		}

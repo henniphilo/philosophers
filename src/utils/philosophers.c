@@ -6,7 +6,7 @@
 /*   By: hwiemann <hwiemann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:04:25 by hwiemann          #+#    #+#             */
-/*   Updated: 2024/05/31 13:17:41 by hwiemann         ###   ########.fr       */
+/*   Updated: 2024/05/31 16:42:36 by hwiemann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ void	*ft_philo (void *arg)
 
 	while (1)
 	{
+		//check if dead
 		think(id, args);
 		if (id % 2 == 0)
 		{
@@ -43,12 +44,6 @@ void	*ft_philo (void *arg)
 		pthread_mutex_unlock(&fork[id]);
 		pthread_mutex_unlock(&fork[(id + 1) % args->philo_num]);
 		sleepy(id, args);
-		if((the_time() - args->last_meal_time) > args->time_to_die)
-		{
-			log_status(args, id, "died");
-			break ;
-		}
-		//noch vergleichem meals needed meals eaten?
 	}
 	return (NULL);
 }

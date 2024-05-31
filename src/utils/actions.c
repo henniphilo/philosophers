@@ -6,7 +6,7 @@
 /*   By: hwiemann <hwiemann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:13:52 by hwiemann          #+#    #+#             */
-/*   Updated: 2024/05/31 13:37:06 by hwiemann         ###   ########.fr       */
+/*   Updated: 2024/05/31 16:57:20 by hwiemann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,5 +32,3 @@ void	sleepy(int philosopher, philo_args *args)
 	usleep(args->time_to_sleep);
 }
 
-
-//(rand() % 100) *
