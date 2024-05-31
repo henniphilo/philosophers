@@ -6,7 +6,7 @@
 /*   By: hwiemann <hwiemann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 11:27:37 by hwiemann          #+#    #+#             */
-/*   Updated: 2024/05/31 16:48:40 by hwiemann         ###   ########.fr       */
+/*   Updated: 2024/05/31 18:47:07 by hwiemann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	main(int argc, char **argv)
 		args = init_philo_args(forks, &write_lock, argv);
 		if(!args)
 			return (1);
-		fork_mutex_init(forks, args);
+		//fork_mutex_init(forks, args);
 		if (create_philos(philosophers, args) != 0)
 		{
 			free(args);

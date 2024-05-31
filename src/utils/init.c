@@ -6,7 +6,7 @@
 /*   By: hwiemann <hwiemann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:15:03 by hwiemann          #+#    #+#             */
-/*   Updated: 2024/05/31 17:22:51 by hwiemann         ###   ########.fr       */
+/*   Updated: 2024/05/31 19:27:10 by hwiemann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,19 +20,19 @@ long long	the_time()
 	return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
 }
 
-
-void	fork_mutex_init(pthread_mutex_t *fork, philo_args *args)
+void	fork_mutex_init(pthread_mutex_t *fork, int philo_num)
 {
 	int	i;
 
 	i = 0;
-	while (i < args->philo_num)
+	while (i < philo_num)
 	{
 //		printf("fork %d of %d is init \n", i, args->philo_num);
 		pthread_mutex_init(&fork[i], NULL);
 		i++;
 	}
 }
+
 int	create_philos(pthread_t	*philosoph, philo_args *args)
 {
 	int	i;
@@ -66,6 +66,7 @@ philo_args	*init_philo_args(pthread_mutex_t *forks, pthread_mutex_t *write_lock,
 		return (NULL);
 	}
 	philo_num = ft_atoi(argv[1]);
+	fork_mutex_init(forks, philo_num);
 	while (i < philo_num)
 	{
 		args[i].forks = forks;

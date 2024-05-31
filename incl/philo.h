@@ -6,7 +6,7 @@
 /*   By: hwiemann <hwiemann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 11:28:02 by hwiemann          #+#    #+#             */
-/*   Updated: 2024/05/31 16:44:55 by hwiemann         ###   ########.fr       */
+/*   Updated: 2024/05/31 19:26:53 by hwiemann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int			wait_for_philos(pthread_t *philosoph, philo_args *args);
 void		eat(int philosopher, philo_args *args);
 void		think(int philosopher, philo_args *args);
 void		sleepy(int philosopher, philo_args *args);
-void		fork_mutex_init(pthread_mutex_t *fork, philo_args *args);
+void		fork_mutex_init(pthread_mutex_t *fork, int philo_num);
 void		destroy_forks(pthread_mutex_t *fork, philo_args *args);
 void		log_status(philo_args *args, int id, const char *status);
 philo_args	*init_philo_args(pthread_mutex_t *forks, pthread_mutex_t *write_lock, char **argv);

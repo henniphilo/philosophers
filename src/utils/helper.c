@@ -6,7 +6,7 @@
 /*   By: hwiemann <hwiemann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:20:55 by hwiemann          #+#    #+#             */
-/*   Updated: 2024/05/31 17:27:35 by hwiemann         ###   ########.fr       */
+/*   Updated: 2024/05/31 19:26:36 by hwiemann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ int		ft_atoi(const char *str)
 void	log_status(philo_args *args, int id, const char *status)
 {
 	pthread_mutex_lock(args->write_lock);
+
 	printf("%lld %d %s\n", the_time(), id + 1, status);
 	pthread_mutex_unlock(args->write_lock);
 }
@@ -76,27 +77,3 @@ void	destroy_forks(pthread_mutex_t *fork, philo_args *args)
 	}
 }
 
-void	*monitor_death(void *arg)
-{
-	philo_args	*args;
-	int			i;
-
-	args = (philo_args *)arg;
-	while (1)
-	{
-		i = 0;
-		while (i < args->philo_num)
-		{
-		//	printf("the time %lld last meal %ld and time to die %d\n", the_time(), args[i].last_meal_time, args[i].time_to_die);
-		//	printf("to die or not to die %lld  time to die is %d\n", (the_time() - args[i].last_meal_time), args[i].time_to_die);
-			if((1000 * (the_time() - args[i].last_meal_time)) > args[i].time_to_die) // need to do it on main threat
-			{
-				log_status(&args[i], i, "died");
-				exit (0);
-			}
-			i++;
-		}
-		usleep(1000); //to sleep 1ms before checking again
-	}
-	return (NULL);
-}

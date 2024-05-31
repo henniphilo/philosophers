@@ -6,7 +6,7 @@
 /*   By: hwiemann <hwiemann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:04:25 by hwiemann          #+#    #+#             */
-/*   Updated: 2024/05/31 16:42:36 by hwiemann         ###   ########.fr       */
+/*   Updated: 2024/05/31 19:06:39 by hwiemann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,4 +48,27 @@ void	*ft_philo (void *arg)
 	return (NULL);
 }
 
+void	*monitor_death(void *arg)
+{
+	philo_args	*args;
+	int			i;
 
+	args = (philo_args *)arg;
+	while (1)
+	{
+		i = 0;
+		while (i < args->philo_num)
+		{
+		//	printf("the time %lld last meal %ld and time to die %d\n", the_time(), args[i].last_meal_time, args[i].time_to_die);
+		//	printf("to die or not to die %lld  time to die is %d\n", (the_time() - args[i].last_meal_time), args[i].time_to_die);
+			if((1000 * (the_time() - args[i].last_meal_time)) > args[i].time_to_die) // need to do it on main threat
+			{
+				log_status(&args[i], i, "died");
+				exit (1);
+			}
+			i++;
+		}
+		usleep(1000); //to sleep 1ms before checking again
+	}
+	return (NULL);
+}
