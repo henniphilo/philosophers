@@ -6,7 +6,7 @@
 /*   By: hwiemann <hwiemann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:15:03 by hwiemann          #+#    #+#             */
-/*   Updated: 2024/05/31 11:30:08 by hwiemann         ###   ########.fr       */
+/*   Updated: 2024/05/31 13:18:07 by hwiemann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,6 @@ long long	the_time()
 	return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
 }
 
-void	log_status(philo_args *args, int id, const char *status)
-{
-	pthread_mutex_lock(args->write_lock);
-	printf("%lld %d %s\n", the_time(), id + 1, status);
-	pthread_mutex_unlock(args->write_lock);
-}
 
 void	fork_mutex_init(pthread_mutex_t *fork, philo_args *args)
 {
