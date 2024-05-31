@@ -6,7 +6,7 @@
 /*   By: hwiemann <hwiemann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:20:55 by hwiemann          #+#    #+#             */
-/*   Updated: 2024/05/31 19:26:36 by hwiemann         ###   ########.fr       */
+/*   Updated: 2024/05/31 19:47:46 by hwiemann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,11 @@ int		ft_atoi(const char *str)
 // uses mutex to not mix up other output
 void	log_status(philo_args *args, int id, const char *status)
 {
-	pthread_mutex_lock(args->write_lock);
+	long long	time;
 
-	printf("%lld %d %s\n", the_time(), id + 1, status);
+	pthread_mutex_lock(args->write_lock);
+	time = the_time() - args->start_time;
+	printf("%lld %d %s\n", time, id + 1, status);
 	pthread_mutex_unlock(args->write_lock);
 }
 

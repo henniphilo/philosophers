@@ -6,7 +6,7 @@
 /*   By: hwiemann <hwiemann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:15:03 by hwiemann          #+#    #+#             */
-/*   Updated: 2024/05/31 19:27:10 by hwiemann         ###   ########.fr       */
+/*   Updated: 2024/05/31 19:49:46 by hwiemann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,16 +57,18 @@ philo_args	*init_philo_args(pthread_mutex_t *forks, pthread_mutex_t *write_lock,
 	int			i;
 	philo_args	*args;
 	int			philo_num;
+	long long	start_time;
 
 	i = 0;
-	args = malloc(sizeof(philo_args) * (ft_atoi(argv[1])));
+	philo_num = ft_atoi(argv[1]);
+	args = malloc(sizeof(philo_args) * philo_num);
 	if (!args)
 	{
 		printf("malloc error \n");
 		return (NULL);
 	}
-	philo_num = ft_atoi(argv[1]);
 	fork_mutex_init(forks, philo_num);
+	start_time = the_time();
 	while (i < philo_num)
 	{
 		args[i].forks = forks;
@@ -77,7 +79,8 @@ philo_args	*init_philo_args(pthread_mutex_t *forks, pthread_mutex_t *write_lock,
 		args[i].time_to_eat = ft_atoi(argv[3]) * 1000;
 		args[i].time_to_sleep = ft_atoi(argv[4]) * 1000;
 		args[i].time_to_think = ft_atoi(argv[5]) * 1000; // wird eigentlich gar nicht geimputet
-		args[i].last_meal_time = the_time();
+		args[i].last_meal_time = start_time;
+		args[i].start_time = start_time;
 		i++;
 	}
 	return (args);

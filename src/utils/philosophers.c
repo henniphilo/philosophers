@@ -6,7 +6,7 @@
 /*   By: hwiemann <hwiemann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:04:25 by hwiemann          #+#    #+#             */
-/*   Updated: 2024/05/31 19:06:39 by hwiemann         ###   ########.fr       */
+/*   Updated: 2024/05/31 19:51:32 by hwiemann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,16 +29,16 @@ void	*ft_philo (void *arg)
 		if (id % 2 == 0)
 		{
 			pthread_mutex_lock(&fork[id]);
-			log_status(args, id, "has taken right fork");
+			log_status(args, id, "has taken fork");
 			pthread_mutex_lock(&fork[(id + 1) % args->philo_num]);
-			log_status(args, id, "has taken left fork");
+			log_status(args, id, "has taken fork");
 		}
 		else
 		{
 			pthread_mutex_lock(&fork[(id + 1) % args->philo_num]);
-			log_status(args, id, "has taken right fork");
+			log_status(args, id, "has taken fork");
 			pthread_mutex_lock(&fork[id]);
-			log_status(args, id, "has taken left fork");
+			log_status(args, id, "has taken fork");
 		}
 		eat(id, args);
 		pthread_mutex_unlock(&fork[id]);

@@ -6,7 +6,7 @@
 /*   By: hwiemann <hwiemann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 11:28:02 by hwiemann          #+#    #+#             */
-/*   Updated: 2024/05/31 19:26:53 by hwiemann         ###   ########.fr       */
+/*   Updated: 2024/05/31 19:46:53 by hwiemann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,9 @@ typedef struct {
 	int				time_to_think;
 	int				time_to_sleep;
 	int				time_to_die;
-	long			last_meal_time;
-	int 			id;
+	long long		last_meal_time;
+	long long		start_time;
+	int				id;
 	int				*meals_eaten;
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	*write_lock;
