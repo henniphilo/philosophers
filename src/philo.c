@@ -6,7 +6,7 @@
 /*   By: hwiemann <hwiemann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 11:27:37 by hwiemann          #+#    #+#             */
-/*   Updated: 2024/05/31 11:16:55 by hwiemann         ###   ########.fr       */
+/*   Updated: 2024/05/31 11:31:18 by hwiemann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,14 +89,13 @@ int	main(int argc, char **argv)
 	if (argc == 6)
 	{
 		int				philo_num;
-		philo_num = atoi(argv[1]);
+		philo_num = ft_atoi(argv[1]);
 
 		pthread_mutex_t	forks[philo_num];
 		pthread_t		philosophers[philo_num];
 		pthread_mutex_t	write_lock;
 		philo_args		*args;
 
-		printf("lets start\n");
 		pthread_mutex_init(&write_lock, NULL);
 		args = init_philo_args(forks, &write_lock, argv);
 		if(!args)
@@ -117,6 +116,6 @@ int	main(int argc, char **argv)
 		free(args);
 	}
 	else
-		printf("Error with Arguments order should be num_of_philo time_to_eat time_to_think time_to_die\n");
+		printf("Error with Arguments order should be num_of_philo time_to_die time_to_eat time_to_think\n");
 	return (0);
 }

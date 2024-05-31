@@ -6,7 +6,7 @@
 /*   By: hwiemann <hwiemann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:15:03 by hwiemann          #+#    #+#             */
-/*   Updated: 2024/05/31 11:16:14 by hwiemann         ###   ########.fr       */
+/*   Updated: 2024/05/31 11:30:08 by hwiemann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	create_philos(pthread_t	*philosoph, philo_args *args)
 	i = 0;
 	while (i < args->philo_num)
 	{
-		printf("philo %d of %d exists now \n", i, args->philo_num);
+	//	printf("philo %d of %d exists now \n", i, args->philo_num);
 		args[i].id = i;
 		if(pthread_create(&philosoph[i], NULL, ft_philo, &args[i]) != 0)
 		{
@@ -65,23 +65,23 @@ philo_args	*init_philo_args(pthread_mutex_t *forks, pthread_mutex_t *write_lock,
 	int			philo_num;
 
 	i = 0;
-	args = malloc(sizeof(philo_args) * (atoi(argv[1])));
+	args = malloc(sizeof(philo_args) * (ft_atoi(argv[1])));
 	if (!args)
 	{
 		printf("malloc error \n");
 		return (NULL);
 	}
-	philo_num = atoi(argv[1]);
+	philo_num = ft_atoi(argv[1]);
 	while (i < philo_num)
 	{
 		args[i].forks = forks;
 		args[i].id = i;
 		args[i].write_lock = write_lock;
 		args[i].philo_num = philo_num;
-		args[i].time_to_eat = atoi(argv[2]) * 1000;
-		args[i].time_to_think = atoi(argv[3]) * 1000;
-		args[i].time_to_sleep = atoi(argv[4]) * 1000;
-		args[i].time_to_die = atoi(argv[5]) * 1000;
+		args[i].time_to_die = ft_atoi(argv[2]) * 1000;
+		args[i].time_to_eat = ft_atoi(argv[3]) * 1000;
+		args[i].time_to_sleep = ft_atoi(argv[4]) * 1000;
+		args[i].time_to_think = ft_atoi(argv[5]) * 1000; // wird eigentlich gar nicht geimputet
 		args[i].last_meal_time = the_time();
 		i++;
 	}
