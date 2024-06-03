@@ -6,7 +6,7 @@
 /*   By: hwiemann <hwiemann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 11:27:37 by hwiemann          #+#    #+#             */
-/*   Updated: 2024/06/03 18:13:01 by hwiemann         ###   ########.fr       */
+/*   Updated: 2024/06/03 19:10:41 by hwiemann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,9 @@ int	main(int argc, char **argv)
 		philo_args		*args;
 
 		pthread_mutex_init(&write_lock, NULL);
-		args = init_philo_args(forks, &write_lock, argv);
+		args = init_philo_args(forks, &write_lock, philo_num, argv);
 		if(!args)
 			return (1);
-		//fork_mutex_init(forks, args);
 		if (create_philos(philosophers, args) != 0)
 		{
 			free(args);
@@ -43,8 +42,9 @@ int	main(int argc, char **argv)
 			return (1);
 		}
 		wait_for_philos(philosophers, args);
-		destroy_forks(forks, args);
-		pthread_mutex_destroy(&write_lock);
+		exit_philos(args);
+		//destroy_forks(forks, args);
+		//pthread_mutex_destroy(&write_lock);
 		free(args);
 	}
 	else

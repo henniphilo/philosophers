@@ -6,7 +6,7 @@
 /*   By: hwiemann <hwiemann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 11:28:02 by hwiemann          #+#    #+#             */
-/*   Updated: 2024/06/03 18:13:42 by hwiemann         ###   ########.fr       */
+/*   Updated: 2024/06/03 19:25:18 by hwiemann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include <sys/time.h>
 # include <pthread.h>
 # include <stdlib.h>
+# include <stdbool.h>
 
 typedef struct {
 	int				id;
@@ -28,11 +29,12 @@ typedef struct {
 	int				time_to_eat;
 	int				time_to_sleep;
 	int				time_to_die;
+	bool			dead;
 	long long		start_time;
-	long long		last_meal_time;
+	long long		*last_meal_time;
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	*write_lock;
-	pthread_mutex_t	last_meal_time_lock;
+	pthread_mutex_t	*last_meal_time_lock;
 } philo_args;
 
 
@@ -51,7 +53,7 @@ void		destroy_forks(pthread_mutex_t *fork, philo_args *args);
 void		log_status(philo_args *args, int id, const char *status);
 
 long long	the_time();
-philo_args	*init_philo_args(pthread_mutex_t *forks, pthread_mutex_t *write_lock, char **argv);
+philo_args	*init_philo_args(pthread_mutex_t *forks, pthread_mutex_t *write_lock, int philo_num, char **argv);
 
 
 # endif

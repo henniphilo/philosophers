@@ -6,7 +6,7 @@
 /*   By: hwiemann <hwiemann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:15:03 by hwiemann          #+#    #+#             */
-/*   Updated: 2024/06/03 18:13:12 by hwiemann         ###   ########.fr       */
+/*   Updated: 2024/06/03 19:23:09 by hwiemann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,14 +32,14 @@ void	fork_mutex_init(pthread_mutex_t *fork, int philo_num)
 	}
 }
 
-void	write_lock_mutex_init(pthread_mutex_t *write_lock, int philo_num)
+void	meal_time_mutex_init(pthread_mutex_t *last_meal_time_lock, int philo_num)
 {
 	int	i;
 
 	i = 0;
 	while (i < philo_num)
 	{
-		pthread_mutex_init(&write_lock[i], NULL);
+		pthread_mutex_init(&last_meal_time_lock[i], NULL);
 		i++;
 	}
 }
@@ -62,15 +62,14 @@ int	create_philos(pthread_t	*philosoph, philo_args *args)
 	return (0);
 }
 
-philo_args	*init_philo_args(pthread_mutex_t *forks, pthread_mutex_t *write_lock, char **argv)
+philo_args	*init_philo_args(pthread_mutex_t *forks, pthread_mutex_t *write_lock, int philo_num, char **argv)
 {
-	int			i;
-	philo_args	*args;
-	int			philo_num;
-	long long	start_time;
+	int				i;
+	philo_args		*args;
+	long long		start_time;
+	pthread_mutex_t	last_meal_time_lock[philo_num];
 
 	i = 0;
-	philo_num = ft_atoi(argv[1]);
 	args = malloc(sizeof(philo_args) * philo_num);
 	if (!args)
 	{
@@ -78,6 +77,7 @@ philo_args	*init_philo_args(pthread_mutex_t *forks, pthread_mutex_t *write_lock,
 		return (NULL);
 	}
 	fork_mutex_init(forks, philo_num);
+	meal_time_mutex_init(last_meal_time_lock, philo_num);
 	start_time = the_time();
 	while (i < philo_num)
 	{
@@ -88,9 +88,11 @@ philo_args	*init_philo_args(pthread_mutex_t *forks, pthread_mutex_t *write_lock,
 		args[i].time_to_die = ft_atoi(argv[2]) * 1000;
 		args[i].time_to_eat = ft_atoi(argv[3]) * 1000;
 		args[i].time_to_sleep = ft_atoi(argv[4]) * 1000;
-		args[i].last_meal_time = start_time;
+		args[i].last_meal_time = malloc(sizeof(long long));
+		*(args[i].last_meal_time) = start_time;
 		args[i].start_time = start_time;
-		pthread_mutex_init(&args[i].last_meal_time_lock, NULL);
+		args[i].last_meal_time_lock = last_meal_time_lock;
+	//	pthread_mutex_init(&args[i].last_meal_time_lock, NULL);
 		i++;
 	}
 	return (args);
