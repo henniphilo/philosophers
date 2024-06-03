@@ -24,7 +24,6 @@ void	*ft_philo (void *arg)
 
 	while (1)
 	{
-		//check if dead
 		think(id, args);
 		if (id % 2 == 0)
 		{
@@ -59,9 +58,7 @@ void	*monitor_death(void *arg)
 		i = 0;
 		while (i < args->philo_num)
 		{
-		//	printf("the time %lld last meal %ld and time to die %d\n", the_time(), args[i].last_meal_time, args[i].time_to_die);
-		//	printf("to die or not to die %lld  time to die is %d\n", (the_time() - args[i].last_meal_time), args[i].time_to_die);
-			if((1000 * (the_time() - args[i].last_meal_time)) > args[i].time_to_die) // need to do it on main threat
+			if((1000 * (the_time() - args[i].last_meal_time)) > args[i].time_to_die)
 			{
 				log_status(&args[i], i, "died");
 				exit (1);

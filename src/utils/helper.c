@@ -56,7 +56,6 @@ int	wait_for_philos(pthread_t *philosoph, philo_args *args)
 	i = 0;
 	while (i < args->philo_num)
 	{
-	//	printf("we are waiting for %d of %d \n", i, args->philo_num);
 		if(pthread_join(philosoph[i], NULL) != 0)
 		{
 			printf("Error in joining threads\n");

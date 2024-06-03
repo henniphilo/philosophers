@@ -23,34 +23,33 @@
 # include <stdlib.h>
 
 typedef struct {
+	int				id;
 	int				philo_num;
 	int				time_to_eat;
-	int				time_to_think;
 	int				time_to_sleep;
 	int				time_to_die;
-	long long		last_meal_time;
 	long long		start_time;
-	int				id;
-	int				*meals_eaten;
+	long long		last_meal_time;
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	*write_lock;
 } philo_args;
 
 
-void		*ft_philo(void *arg);
-void		*monitor_death(void *arg);
-long long	the_time();
 int			ft_atoi(const char *str);
 int			create_philos(pthread_t	*philosoph, philo_args *args);
 int			wait_for_philos(pthread_t *philosoph, philo_args *args);
+
+void		*ft_philo(void *arg);
+void		*monitor_death(void *arg);
 void		eat(int philosopher, philo_args *args);
 void		think(int philosopher, philo_args *args);
 void		sleepy(int philosopher, philo_args *args);
 void		fork_mutex_init(pthread_mutex_t *fork, int philo_num);
 void		destroy_forks(pthread_mutex_t *fork, philo_args *args);
 void		log_status(philo_args *args, int id, const char *status);
-philo_args	*init_philo_args(pthread_mutex_t *forks, pthread_mutex_t *write_lock, char **argv);
 
+long long	the_time();
+philo_args	*init_philo_args(pthread_mutex_t *forks, pthread_mutex_t *write_lock, char **argv);
 
 
 # endif

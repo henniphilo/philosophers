@@ -15,7 +15,7 @@
 
 int	main(int argc, char **argv)
 {
-	if (argc == 6)
+	if (argc == 5)
 	{
 		int				philo_num;
 		philo_num = ft_atoi(argv[1]);
@@ -48,6 +48,6 @@ int	main(int argc, char **argv)
 		free(args);
 	}
 	else
-		printf("Error with Arguments order should be num_of_philo time_to_die time_to_eat time_to_think\n");
+		printf("Error Input should be num_of_philo time_to_die time_to_eat\n");
 	return (0);
 }

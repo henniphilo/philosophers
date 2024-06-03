@@ -23,7 +23,6 @@ void	eat(int philosopher, philo_args *args)
 	log_status(args, philosopher, "is eating");
 	args->last_meal_time = the_time();
 	usleep(args->time_to_eat);
-	//args->meals_eaten[philosopher]++;
 }
 
 void	sleepy(int philosopher, philo_args *args)
