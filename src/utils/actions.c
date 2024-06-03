@@ -6,7 +6,7 @@
 /*   By: hwiemann <hwiemann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:13:52 by hwiemann          #+#    #+#             */
-/*   Updated: 2024/05/31 19:56:33 by hwiemann         ###   ########.fr       */
+/*   Updated: 2024/06/03 16:45:26 by hwiemann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,14 @@
 void	think(int philosopher, philo_args *args)
 {
 	log_status(args, philosopher, "is thinking");
-	//usleep(args->time_to_think);
 }
 
 void	eat(int philosopher, philo_args *args)
 {
 	log_status(args, philosopher, "is eating");
+	pthread_mutex_lock(&args->last_meal_time_lock);
 	args->last_meal_time = the_time();
+	pthread_mutex_unlock(&args->last_meal_time_lock);
 	usleep(args->time_to_eat);
 }
 

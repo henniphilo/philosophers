@@ -6,7 +6,7 @@
 /*   By: hwiemann <hwiemann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:15:03 by hwiemann          #+#    #+#             */
-/*   Updated: 2024/05/31 19:49:46 by hwiemann         ###   ########.fr       */
+/*   Updated: 2024/06/03 18:13:12 by hwiemann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,18 @@ void	fork_mutex_init(pthread_mutex_t *fork, int philo_num)
 	while (i < philo_num)
 	{
 		pthread_mutex_init(&fork[i], NULL);
+		i++;
+	}
+}
+
+void	write_lock_mutex_init(pthread_mutex_t *write_lock, int philo_num)
+{
+	int	i;
+
+	i = 0;
+	while (i < philo_num)
+	{
+		pthread_mutex_init(&write_lock[i], NULL);
 		i++;
 	}
 }
@@ -78,6 +90,7 @@ philo_args	*init_philo_args(pthread_mutex_t *forks, pthread_mutex_t *write_lock,
 		args[i].time_to_sleep = ft_atoi(argv[4]) * 1000;
 		args[i].last_meal_time = start_time;
 		args[i].start_time = start_time;
+		pthread_mutex_init(&args[i].last_meal_time_lock, NULL);
 		i++;
 	}
 	return (args);

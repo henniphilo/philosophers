@@ -6,7 +6,7 @@
 /*   By: hwiemann <hwiemann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 11:28:02 by hwiemann          #+#    #+#             */
-/*   Updated: 2024/05/31 19:46:53 by hwiemann         ###   ########.fr       */
+/*   Updated: 2024/06/03 18:13:42 by hwiemann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ typedef struct {
 	long long		last_meal_time;
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	*write_lock;
+	pthread_mutex_t	last_meal_time_lock;
 } philo_args;
 
 
@@ -41,6 +42,7 @@ int			wait_for_philos(pthread_t *philosoph, philo_args *args);
 
 void		*ft_philo(void *arg);
 void		*monitor_death(void *arg);
+void		exit_philos(philo_args *args);
 void		eat(int philosopher, philo_args *args);
 void		think(int philosopher, philo_args *args);
 void		sleepy(int philosopher, philo_args *args);
