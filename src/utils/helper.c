@@ -6,7 +6,7 @@
 /*   By: hwiemann <hwiemann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:20:55 by hwiemann          #+#    #+#             */
-/*   Updated: 2024/05/31 19:47:46 by hwiemann         ###   ########.fr       */
+/*   Updated: 2024/06/04 15:02:48 by hwiemann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int		ft_atoi(const char *str)
 	return (sign * result);
 }
 // logs time and state of philos
-// uses mutex to not mix up other output
+// uses mutex to not mix up other outputgf
 void	log_status(philo_args *args, int id, const char *status)
 {
 	long long	time;
