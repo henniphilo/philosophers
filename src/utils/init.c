@@ -6,7 +6,7 @@
 /*   By: hwiemann <hwiemann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:15:03 by hwiemann          #+#    #+#             */
-/*   Updated: 2024/06/03 19:23:09 by hwiemann         ###   ########.fr       */
+/*   Updated: 2024/06/04 11:51:13 by hwiemann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,12 @@ void	fork_mutex_init(pthread_mutex_t *fork, int philo_num)
 	i = 0;
 	while (i < philo_num)
 	{
-		pthread_mutex_init(&fork[i], NULL);
+		printf("init fork  %d\n", i);
+		if (pthread_mutex_init(&fork[i], NULL) != 0)
+		{
+			printf("Error in fork mutex init\n");
+			return ;
+		}
 		i++;
 	}
 }
@@ -39,7 +44,29 @@ void	meal_time_mutex_init(pthread_mutex_t *last_meal_time_lock, int philo_num)
 	i = 0;
 	while (i < philo_num)
 	{
-		pthread_mutex_init(&last_meal_time_lock[i], NULL);
+		printf("init meal time lock %d\n", i);
+		if (pthread_mutex_init(&last_meal_time_lock[i], NULL) != 0)
+		{
+			printf("Error in meal time mutex init\n");
+			return ;
+		}
+		i++;
+	}
+}
+
+void	write_lock_mutex_init(pthread_mutex_t *write_time_lock, int philo_num)
+{
+	int	i;
+
+	i = 0;
+	while (i < philo_num)
+	{
+		printf("init write lock %d\n", i);
+		if (pthread_mutex_init(&write_time_lock[i], NULL) != 0)
+		{
+			printf("Error in write lock mutex init\n");
+			return ;
+		}
 		i++;
 	}
 }
@@ -68,6 +95,7 @@ philo_args	*init_philo_args(pthread_mutex_t *forks, pthread_mutex_t *write_lock,
 	philo_args		*args;
 	long long		start_time;
 	pthread_mutex_t	last_meal_time_lock[philo_num];
+//	pthread_mutex_t write_lock;
 
 	i = 0;
 	args = malloc(sizeof(philo_args) * philo_num);
@@ -78,6 +106,8 @@ philo_args	*init_philo_args(pthread_mutex_t *forks, pthread_mutex_t *write_lock,
 	}
 	fork_mutex_init(forks, philo_num);
 	meal_time_mutex_init(last_meal_time_lock, philo_num);
+	//pthread_mutex_init(&write_lock, NULL);
+	//write_lock_mutex_init(write_lock, philo_num);
 	start_time = the_time();
 	while (i < philo_num)
 	{

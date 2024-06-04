@@ -6,7 +6,7 @@
 /*   By: hwiemann <hwiemann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:04:25 by hwiemann          #+#    #+#             */
-/*   Updated: 2024/06/03 19:33:37 by hwiemann         ###   ########.fr       */
+/*   Updated: 2024/06/04 10:49:03 by hwiemann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ void	*ft_philo (void *arg)
 		think(id, args);
 		if (id % 2 == 0)
 		{
+			//printf("Philosopher %d trying to lock fork %d\n", id, id);
 			pthread_mutex_lock(&fork[id]);
 			log_status(args, id, "has taken a fork");
 			pthread_mutex_lock(&fork[(id + 1) % args->philo_num]);

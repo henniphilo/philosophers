@@ -6,7 +6,7 @@
 /*   By: hwiemann <hwiemann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:20:55 by hwiemann          #+#    #+#             */
-/*   Updated: 2024/05/31 19:47:46 by hwiemann         ###   ########.fr       */
+/*   Updated: 2024/06/04 11:45:46 by hwiemann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,10 +43,10 @@ void	log_status(philo_args *args, int id, const char *status)
 {
 	long long	time;
 
-	pthread_mutex_lock(args->write_lock);
+	pthread_mutex_lock(&(args->write_lock[id]));
 	time = the_time() - args->start_time;
 	printf("%lld %d %s\n", time, id + 1, status);
-	pthread_mutex_unlock(args->write_lock);
+	pthread_mutex_unlock(&(args->write_lock[id]));
 }
 
 int	wait_for_philos(pthread_t *philosoph, philo_args *args)
