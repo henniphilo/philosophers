@@ -1,0 +1,32 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+	  {
+		"label": "build",
+		"type": "shell",
+		"command": "make",
+		"args": [],
+		"group": {
+		  "kind": "build",
+		  "isDefault": true
+		},
+		"problemMatcher": ["$gcc"]
+	  },
+	  {
+		"label": "run-helgrind",
+		"type": "shell",
+		"command": "valgrind",
+		"args": [
+		  "--tool=helgrind",
+		  "--log-file=helgrind-out.txt",
+		  "${workspaceFolder}/philo",
+		  "5", "110", "200", "200"  // Example arguments
+		],
+		"group": {
+		  "kind": "test",
+		  "isDefault": true
+		},
+		"problemMatcher": ["$gcc"]
+	  }
+	]
+  }

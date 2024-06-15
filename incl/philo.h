@@ -6,7 +6,7 @@
 /*   By: hwiemann <hwiemann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 11:28:02 by hwiemann          #+#    #+#             */
-/*   Updated: 2024/05/31 19:46:53 by hwiemann         ###   ########.fr       */
+/*   Updated: 2024/06/15 13:30:32 by hwiemann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,8 @@ void		*monitor_death(void *arg);
 void		eat(int philosopher, philo_args *args);
 void		think(int philosopher, philo_args *args);
 void		sleepy(int philosopher, philo_args *args);
+void		pick_up_fork (int id, int side, pthread_mutex_t *fork, philo_args *args);
+void		drop_down_fork (int id, int side, pthread_mutex_t *fork, philo_args *args);
 void		fork_mutex_init(pthread_mutex_t *fork, int philo_num);
 void		destroy_forks(pthread_mutex_t *fork, philo_args *args);
 void		log_status(philo_args *args, int id, const char *status);

@@ -6,11 +6,44 @@
 /*   By: hwiemann <hwiemann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:04:25 by hwiemann          #+#    #+#             */
-/*   Updated: 2024/06/04 15:14:05 by hwiemann         ###   ########.fr       */
+/*   Updated: 2024/06/15 13:43:21 by hwiemann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../incl/philo.h"
+
+// left fork has same index as philo , right chopstick is id + 1
+
+void	pick_up_fork (int id, int side, pthread_mutex_t *fork, philo_args *args)
+{
+	if (side == 0)
+	{
+		pthread_mutex_lock(&fork[id]); // takes left
+		log_status(args, id, "has taken left fork");
+	}
+	else
+	{
+		// takes right
+		pthread_mutex_lock(&fork[(id + 1) % args->philo_num]); // % num makes it a round table
+		log_status(args, id, "has taken right fork");
+
+	}
+}
+
+
+void	drop_down_fork (int id, int side, pthread_mutex_t *fork, philo_args *args)
+{
+	if (side == 0)
+	{
+		pthread_mutex_unlock(&fork[id]); // puts down left
+		log_status(args, id, "drops left fork");
+	}
+	else // puts down right
+	{
+		pthread_mutex_unlock(&fork[(id + 1) % args->philo_num]); // % num makes it a round table
+		log_status(args, id, "drops right fork");
+	}
+}
 
 void	*ft_philo (void *arg)
 {
@@ -27,25 +60,22 @@ void	*ft_philo (void *arg)
 		think(id, args);
 		if (id % 2 == 0)
 		{
-			pthread_mutex_lock(&fork[id]);
-			log_status(args, id, "has taken a fork");
-			pthread_mutex_lock(&fork[(id + 1) % args->philo_num]);
-			log_status(args, id, "has taken a fork");
+			pick_up_fork(id, 0, fork, args);
+			pick_up_fork(id, 1, fork, args);
 		}
 		else
 		{
-			pthread_mutex_lock(&fork[(id + 1) % args->philo_num]);
-			log_status(args, id, "has taken a fork");
-			pthread_mutex_lock(&fork[id]);
-			log_status(args, id, "has taken a fork");
+			pick_up_fork(id, 1, fork, args);
+			pick_up_fork(id, 0, fork, args);
 		}
-		pthread_mutex_unlock(&fork[id]);
-		pthread_mutex_unlock(&fork[(id + 1) % args->philo_num]);
 		eat(id, args);
+		drop_down_fork(id, 0, fork, args);
+		drop_down_fork(id, 1, fork, args);
 		sleepy(id, args);
 	}
 	return (NULL);
 }
+
 
 void	*monitor_death(void *arg)
 {
@@ -69,3 +99,39 @@ void	*monitor_death(void *arg)
 	}
 	return (NULL);
 }
+
+/*
+void	*ft_philo (void *arg)
+{
+	int	id;
+	philo_args	*args;
+	pthread_mutex_t *fork;
+
+	args = (philo_args *)arg;
+	id = args->id;
+	fork = args->forks;
+
+	while (1)
+	{
+		think(id, args);
+		if (id % 2 == 0)
+		{
+			pthread_mutex_lock(&fork[id]);
+			log_status(args, id, "has taken left fork");
+			pthread_mutex_lock(&fork[(id + 1) % args->philo_num]);
+			log_status(args, id, "has taken right fork");
+		}
+		else
+		{
+			pthread_mutex_lock(&fork[(id + 1) % args->philo_num]);
+			log_status(args, id, "has taken right fork");
+			pthread_mutex_lock(&fork[id]);
+			log_status(args, id, "has taken left fork");
+		}
+		pthread_mutex_unlock(&fork[id]);
+		pthread_mutex_unlock(&fork[(id + 1) % args->philo_num]);
+		eat(id, args);
+		sleepy(id, args);
+	}
+	return (NULL);
+} */
