@@ -6,7 +6,7 @@
 /*   By: hwiemann <hwiemann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 11:28:02 by hwiemann          #+#    #+#             */
-/*   Updated: 2024/06/15 13:30:32 by hwiemann         ###   ########.fr       */
+/*   Updated: 2024/06/15 15:49:19 by hwiemann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,8 @@ void		drop_down_fork (int id, int side, pthread_mutex_t *fork, philo_args *args)
 void		fork_mutex_init(pthread_mutex_t *fork, int philo_num);
 void		destroy_forks(pthread_mutex_t *fork, philo_args *args);
 void		log_status(philo_args *args, int id, const char *status);
+void		ft_exit(philo_args *args);
+void		philo_threads(philo_args *args, pthread_t *philosophers);
 
 long long	the_time();
 philo_args	*init_philo_args(pthread_mutex_t *forks, pthread_mutex_t *write_lock, char **argv);

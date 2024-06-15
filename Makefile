@@ -19,8 +19,9 @@ all: $(NAME)
 $(NAME): $(OBJ)
 	$(CC) $(CFLAGS) $(OBJ) -ldl -o $(NAME)
 
+debug: CFLAGS += -g3 -fsanitize=thread -O0
 debug: $(OBJ)
-	$(CC) $(CFLAGS) $(OBJ) -ldl -g3 -fsanitize=thread -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJ) -ldl -o $(NAME)
 
 %.o: %.c
 	$(CC) $(CFLAGS) -Iinclude -I/usr/include -O3 -c $< -o $@

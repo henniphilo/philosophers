@@ -6,7 +6,7 @@
 /*   By: hwiemann <hwiemann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 11:27:37 by hwiemann          #+#    #+#             */
-/*   Updated: 2024/05/31 18:47:07 by hwiemann         ###   ########.fr       */
+/*   Updated: 2024/06/15 17:39:05 by hwiemann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,34 +20,58 @@ int	main(int argc, char **argv)
 		int				philo_num;
 		philo_num = ft_atoi(argv[1]);
 
-		pthread_mutex_t	forks[philo_num];
-		pthread_t		philosophers[philo_num];
-		pthread_t		monitor;
+		pthread_mutex_t	*forks;
+		pthread_t		*philosophers;
 		pthread_mutex_t	write_lock;
 		philo_args		*args;
 
+		forks = malloc(sizeof(pthread_mutex_t) * philo_num);
+		philosophers = malloc(sizeof(pthread_t) * philo_num);
+		if (!forks || !philosophers)
+		{
+			printf("Malloc Error \n");
+			return (1);
+		}
 		pthread_mutex_init(&write_lock, NULL);
 		args = init_philo_args(forks, &write_lock, argv);
 		if(!args)
 			return (1);
-		//fork_mutex_init(forks, args);
-		if (create_philos(philosophers, args) != 0)
-		{
-			free(args);
-			return (1);
-		}
-		if (pthread_create(&monitor, NULL, monitor_death, args) != 0)
-		{
-			printf("Error in creating death monitor thread\n");
-			free(args);
-			return (1);
-		}
-		wait_for_philos(philosophers, args);
-		destroy_forks(forks, args);
-		pthread_mutex_destroy(&write_lock);
-		free(args);
+		philo_threads(args, philosophers);
+		ft_exit(args);
 	}
 	else
 		printf("Error Input should be num_of_philo time_to_die time_to_eat\n");
 	return (0);
+}
+
+void		philo_threads(philo_args *args, pthread_t *philosophers)
+{
+	pthread_t		monitor;
+
+	if (pthread_create(&monitor, NULL, monitor_death, args) != 0)
+	{
+		printf("Error in creating death monitor thread\n");
+		free(args);
+		return ;
+	}
+	if (create_philos(philosophers, args) != 0)
+	{
+		free(args);
+		return ;
+	}
+	wait_for_philos(philosophers, args);
+}
+
+void	ft_exit(philo_args *args)
+{
+	int	i;
+
+	i = 0;
+	//printf("ist in exit \n");
+	destroy_forks(args->forks, args);
+	pthread_mutex_destroy(args->write_lock);
+	if (args->forks)
+		free(args->forks);
+	if (args)
+		free(args);
 }

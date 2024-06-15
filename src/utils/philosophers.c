@@ -6,7 +6,7 @@
 /*   By: hwiemann <hwiemann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:04:25 by hwiemann          #+#    #+#             */
-/*   Updated: 2024/06/15 13:43:21 by hwiemann         ###   ########.fr       */
+/*   Updated: 2024/06/15 17:37:25 by hwiemann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,13 @@ void	pick_up_fork (int id, int side, pthread_mutex_t *fork, philo_args *args)
 	if (side == 0)
 	{
 		pthread_mutex_lock(&fork[id]); // takes left
-		log_status(args, id, "has taken left fork");
+		log_status(args, id, "has taken a fork");
 	}
 	else
 	{
 		// takes right
 		pthread_mutex_lock(&fork[(id + 1) % args->philo_num]); // % num makes it a round table
-		log_status(args, id, "has taken right fork");
+		log_status(args, id, "has taken a fork");
 
 	}
 }
@@ -36,12 +36,12 @@ void	drop_down_fork (int id, int side, pthread_mutex_t *fork, philo_args *args)
 	if (side == 0)
 	{
 		pthread_mutex_unlock(&fork[id]); // puts down left
-		log_status(args, id, "drops left fork");
+		//log_status(args, id, "drops left fork");
 	}
 	else // puts down right
 	{
 		pthread_mutex_unlock(&fork[(id + 1) % args->philo_num]); // % num makes it a round table
-		log_status(args, id, "drops right fork");
+		//log_status(args, id, "drops right fork");
 	}
 }
 
@@ -82,6 +82,7 @@ void	*monitor_death(void *arg)
 	philo_args	*args;
 	int			i;
 
+	//printf("death wird monitord\n");
 	args = (philo_args *)arg;
 	while (1)
 	{
@@ -91,6 +92,7 @@ void	*monitor_death(void *arg)
 			if((1000 * (the_time() - args[i].last_meal_time)) > args[i].time_to_die)
 			{
 				log_status(&args[i], i, "died");
+				ft_exit(args);
 				exit (1);
 			}
 			i++;
