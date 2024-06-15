@@ -6,7 +6,7 @@
 /*   By: hwiemann <hwiemann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:15:03 by hwiemann          #+#    #+#             */
-/*   Updated: 2024/05/31 19:49:46 by hwiemann         ###   ########.fr       */
+/*   Updated: 2024/06/15 18:04:21 by hwiemann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,8 @@ philo_args	*init_philo_args(pthread_mutex_t *forks, pthread_mutex_t *write_lock,
 	}
 	fork_mutex_init(forks, philo_num);
 	start_time = the_time();
+	if (argv[5])
+		args->must_eat = ft_atoi(argv[5]);
 	while (i < philo_num)
 	{
 		args[i].forks = forks;
@@ -76,6 +78,7 @@ philo_args	*init_philo_args(pthread_mutex_t *forks, pthread_mutex_t *write_lock,
 		args[i].time_to_die = ft_atoi(argv[2]) * 1000;
 		args[i].time_to_eat = ft_atoi(argv[3]) * 1000;
 		args[i].time_to_sleep = ft_atoi(argv[4]) * 1000;
+		args[i].meal_eaten = 0;
 		args[i].last_meal_time = start_time;
 		args[i].start_time = start_time;
 		i++;

@@ -6,7 +6,7 @@
 /*   By: hwiemann <hwiemann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 11:27:37 by hwiemann          #+#    #+#             */
-/*   Updated: 2024/06/15 17:39:05 by hwiemann         ###   ########.fr       */
+/*   Updated: 2024/06/15 18:40:55 by hwiemann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 int	main(int argc, char **argv)
 {
-	if (argc == 5)
+	if (argc == 5 || argc == 6)
 	{
 		int				philo_num;
 		philo_num = ft_atoi(argv[1]);
@@ -40,7 +40,7 @@ int	main(int argc, char **argv)
 		ft_exit(args);
 	}
 	else
-		printf("Error Input should be num_of_philo time_to_die time_to_eat\n");
+		printf("enter [num_of_philo][time_to_die][time_to_eat]([must_eat])\n");
 	return (0);
 }
 
@@ -74,4 +74,5 @@ void	ft_exit(philo_args *args)
 		free(args->forks);
 	if (args)
 		free(args);
+	exit (0);
 }

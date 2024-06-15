@@ -6,13 +6,12 @@
 /*   By: hwiemann <hwiemann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 11:28:02 by hwiemann          #+#    #+#             */
-/*   Updated: 2024/06/15 15:49:19 by hwiemann         ###   ########.fr       */
+/*   Updated: 2024/06/15 18:56:19 by hwiemann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHILO_H
 # define PHILO_H
-#define NUM_PHILO 5
 
 # include <unistd.h>
 # include <limits.h>
@@ -28,6 +27,8 @@ typedef struct {
 	int				time_to_eat;
 	int				time_to_sleep;
 	int				time_to_die;
+	int				must_eat;
+	int				meal_eaten;
 	long long		start_time;
 	long long		last_meal_time;
 	pthread_mutex_t	*forks;
@@ -39,6 +40,7 @@ int			ft_atoi(const char *str);
 int			create_philos(pthread_t	*philosoph, philo_args *args);
 int			wait_for_philos(pthread_t *philosoph, philo_args *args);
 
+void		check_must_eat(philo_args *args);
 void		*ft_philo(void *arg);
 void		*monitor_death(void *arg);
 void		eat(int philosopher, philo_args *args);
