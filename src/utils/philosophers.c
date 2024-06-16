@@ -6,7 +6,7 @@
 /*   By: hwiemann <hwiemann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:04:25 by hwiemann          #+#    #+#             */
-/*   Updated: 2024/06/16 12:56:55 by hwiemann         ###   ########.fr       */
+/*   Updated: 2024/06/16 21:42:03 by hwiemann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ void	drop_down_fork (int id, pthread_mutex_t *fork, philo_args *args)
 {
 	pthread_mutex_unlock(&fork[id]); // puts down left
 	pthread_mutex_unlock(&fork[(id + 1) % args->philo_num]); // % num makes it a round table
+	check_must_eat(args);
 }
 
 void	*ft_philo (void *arg)
@@ -60,7 +61,6 @@ void	*ft_philo (void *arg)
 			pick_up_fork(id, 0, fork, args);
 		}
 		eat(id, args);
-	//	drop_down_fork(id, 1, fork, args);
 		sleepy(id, args);
 	//	check_must_eat(args);
 	}
@@ -74,7 +74,7 @@ void	*monitor_death(void *arg)
 	int			i;
 
 	args = (philo_args *)arg;
-	while (1)
+	while (!args->stop)
 	{
 		i = 0;
 		while (i < args->philo_num)
@@ -83,49 +83,15 @@ void	*monitor_death(void *arg)
 			if((1000 * (the_time() - args[i].last_meal_time)) > args[i].time_to_die)
 			{
 				log_status(&args[i], i, "died");
-				pthread_mutex_unlock(&args[i].last_meal_lock);
+				args->stop = 1;
 				ft_exit(args);
 			}
-			pthread_mutex_unlock(&args[i].last_meal_lock);
+			else
+				pthread_mutex_unlock(&args[i].last_meal_lock);
 			i++;
 		}
+		check_must_eat(args);
 		usleep(1000); //to sleep 1ms before checking again
 	}
 	return (NULL);
 }
-
-/*
-void	*ft_philo (void *arg)
-{
-	int	id;
-	philo_args	*args;
-	pthread_mutex_t *fork;
-
-	args = (philo_args *)arg;
-	id = args->id;
-	fork = args->forks;
-
-	while (1)
-	{
-		think(id, args);
-		if (id % 2 == 0)
-		{
-			pthread_mutex_lock(&fork[id]);
-			log_status(args, id, "has taken left fork");
-			pthread_mutex_lock(&fork[(id + 1) % args->philo_num]);
-			log_status(args, id, "has taken right fork");
-		}
-		else
-		{
-			pthread_mutex_lock(&fork[(id + 1) % args->philo_num]);
-			log_status(args, id, "has taken right fork");
-			pthread_mutex_lock(&fork[id]);
-			log_status(args, id, "has taken left fork");
-		}
-		pthread_mutex_unlock(&fork[id]);
-		pthread_mutex_unlock(&fork[(id + 1) % args->philo_num]);
-		eat(id, args);
-		sleepy(id, args);
-	}
-	return (NULL);
-} */

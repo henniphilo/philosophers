@@ -6,7 +6,7 @@
 /*   By: hwiemann <hwiemann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:20:55 by hwiemann          #+#    #+#             */
-/*   Updated: 2024/06/16 14:25:15 by hwiemann         ###   ########.fr       */
+/*   Updated: 2024/06/16 21:30:11 by hwiemann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,14 +49,14 @@ void	log_status(philo_args *args, int id, const char *status)
 	pthread_mutex_unlock(args->write_lock);
 }
 
-int	wait_for_philos(pthread_t *philosoph, philo_args *args)
+int	wait_for_philos(philo_args *args)
 {
 	int	i;
 
 	i = 0;
 	while (i < args->philo_num)
 	{
-		if(pthread_join(philosoph[i], NULL) != 0)
+		if(pthread_join(args->philosophers[i], NULL) != 0)
 		{
 			printf("Error in joining threads\n");
 			return (1);

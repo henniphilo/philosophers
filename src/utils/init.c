@@ -6,7 +6,7 @@
 /*   By: hwiemann <hwiemann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:15:03 by hwiemann          #+#    #+#             */
-/*   Updated: 2024/06/16 14:36:34 by hwiemann         ###   ########.fr       */
+/*   Updated: 2024/06/16 21:46:12 by hwiemann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,9 @@ void	fork_mutex_init(pthread_mutex_t *fork, pthread_mutex_t *write_lock, int phi
 	while (i < philo_num)
 	{
 		pthread_mutex_init(&fork[i], NULL);
-		pthread_mutex_init(&write_lock[i], NULL);
 		i++;
 	}
+	pthread_mutex_init(write_lock, NULL);
 }
 
 int	create_philos(pthread_t	*philosoph, philo_args *args)
@@ -70,11 +70,12 @@ philo_args	*init_philo_args(pthread_mutex_t *forks, pthread_mutex_t *write_lock,
 	start_time = the_time();
 	while (i < philo_num)
 	{
+		args[i].stop = 0;
 		args[i].forks = forks;
 		args[i].write_lock = write_lock;
 		args[i].id = i;
 		args[i].philo_num = philo_num;
-		args[i].time_to_die = (ft_atoi(argv[2]) * 1000 + 1);
+		args[i].time_to_die = (ft_atoi(argv[2]) * 1000);
 		args[i].time_to_eat = ft_atoi(argv[3]) * 1000;
 		args[i].time_to_sleep = ft_atoi(argv[4]) * 1000;
 		args[i].meal_eaten = 0;
@@ -82,6 +83,8 @@ philo_args	*init_philo_args(pthread_mutex_t *forks, pthread_mutex_t *write_lock,
 		args[i].start_time = start_time;
 		if (argv[5])
 			args[i].must_eat = ft_atoi(argv[5]);
+		else
+			args[i].must_eat = -1;
 		pthread_mutex_init(&args[i].meal_check_lock, NULL);
 		pthread_mutex_init(&args[i].last_meal_lock, NULL);
 		i++;

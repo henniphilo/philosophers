@@ -6,7 +6,7 @@
 /*   By: hwiemann <hwiemann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:13:52 by hwiemann          #+#    #+#             */
-/*   Updated: 2024/06/16 13:23:39 by hwiemann         ###   ########.fr       */
+/*   Updated: 2024/06/16 20:46:26 by hwiemann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ void	eat(int philosopher, philo_args *args)
 	log_status(args, philosopher, "is eating");
 	usleep(args->time_to_eat);
 	drop_down_fork(philosopher, args->forks, args);
-	check_must_eat(args);
 }
 
 void	sleepy(int philosopher, philo_args *args)
