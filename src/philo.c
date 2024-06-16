@@ -6,7 +6,7 @@
 /*   By: hwiemann <hwiemann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 11:27:37 by hwiemann          #+#    #+#             */
-/*   Updated: 2024/06/15 18:40:55 by hwiemann         ###   ########.fr       */
+/*   Updated: 2024/06/16 13:24:16 by hwiemann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,9 +67,14 @@ void	ft_exit(philo_args *args)
 	int	i;
 
 	i = 0;
-	//printf("ist in exit \n");
 	destroy_forks(args->forks, args);
 	pthread_mutex_destroy(args->write_lock);
+	while (i < args->philo_num)
+	{
+		pthread_mutex_destroy(&args[i].meal_check_lock);
+		pthread_mutex_destroy(&args[i].last_meal_lock);
+		i++;
+	}
 	if (args->forks)
 		free(args->forks);
 	if (args)

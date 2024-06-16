@@ -6,7 +6,7 @@
 /*   By: hwiemann <hwiemann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:04:25 by hwiemann          #+#    #+#             */
-/*   Updated: 2024/06/16 12:09:09 by hwiemann         ###   ########.fr       */
+/*   Updated: 2024/06/16 12:56:55 by hwiemann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,16 +30,10 @@ void	pick_up_fork (int id, int side, pthread_mutex_t *fork, philo_args *args)
 	}
 }
 
-void	drop_down_fork (int id, int side, pthread_mutex_t *fork, philo_args *args)
+void	drop_down_fork (int id, pthread_mutex_t *fork, philo_args *args)
 {
-	if (side == 0)
-	{
-		pthread_mutex_unlock(&fork[id]); // puts down left
-	}
-	else // puts down right
-	{
-		pthread_mutex_unlock(&fork[(id + 1) % args->philo_num]); // % num makes it a round table
-	}
+	pthread_mutex_unlock(&fork[id]); // puts down left
+	pthread_mutex_unlock(&fork[(id + 1) % args->philo_num]); // % num makes it a round table
 }
 
 void	*ft_philo (void *arg)
@@ -66,8 +60,7 @@ void	*ft_philo (void *arg)
 			pick_up_fork(id, 0, fork, args);
 		}
 		eat(id, args);
-		drop_down_fork(id, 0, fork, args);
-		drop_down_fork(id, 1, fork, args);
+	//	drop_down_fork(id, 1, fork, args);
 		sleepy(id, args);
 	//	check_must_eat(args);
 	}
@@ -80,18 +73,20 @@ void	*monitor_death(void *arg)
 	philo_args	*args;
 	int			i;
 
-	//printf("death wird monitord\n");
 	args = (philo_args *)arg;
 	while (1)
 	{
 		i = 0;
 		while (i < args->philo_num)
 		{
+			pthread_mutex_lock(&args[i].last_meal_lock);
 			if((1000 * (the_time() - args[i].last_meal_time)) > args[i].time_to_die)
 			{
 				log_status(&args[i], i, "died");
+				pthread_mutex_unlock(&args[i].last_meal_lock);
 				ft_exit(args);
 			}
+			pthread_mutex_unlock(&args[i].last_meal_lock);
 			i++;
 		}
 		usleep(1000); //to sleep 1ms before checking again
