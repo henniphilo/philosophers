@@ -6,7 +6,7 @@
 /*   By: hwiemann <hwiemann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:04:25 by hwiemann          #+#    #+#             */
-/*   Updated: 2024/06/15 18:46:59 by hwiemann         ###   ########.fr       */
+/*   Updated: 2024/06/16 12:09:09 by hwiemann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ void	*ft_philo (void *arg)
 		drop_down_fork(id, 0, fork, args);
 		drop_down_fork(id, 1, fork, args);
 		sleepy(id, args);
-		check_must_eat(args);
+	//	check_must_eat(args);
 	}
 	return (NULL);
 }

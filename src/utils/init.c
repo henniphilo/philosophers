@@ -6,7 +6,7 @@
 /*   By: hwiemann <hwiemann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:15:03 by hwiemann          #+#    #+#             */
-/*   Updated: 2024/06/15 18:04:21 by hwiemann         ###   ########.fr       */
+/*   Updated: 2024/06/16 11:59:00 by hwiemann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ philo_args	*init_philo_args(pthread_mutex_t *forks, pthread_mutex_t *write_lock,
 		args[i].meal_eaten = 0;
 		args[i].last_meal_time = start_time;
 		args[i].start_time = start_time;
+		pthread_mutex_init(&args[i].meal_check_lock, NULL);
 		i++;
 	}
 	return (args);
