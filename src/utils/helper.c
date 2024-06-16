@@ -6,7 +6,7 @@
 /*   By: hwiemann <hwiemann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:20:55 by hwiemann          #+#    #+#             */
-/*   Updated: 2024/06/15 17:39:17 by hwiemann         ###   ########.fr       */
+/*   Updated: 2024/06/16 14:25:15 by hwiemann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,11 +69,14 @@ int	wait_for_philos(pthread_t *philosoph, philo_args *args)
 void	destroy_forks(pthread_mutex_t *fork, philo_args *args)
 {
 	int	i;
+	int	result;
 
 	i = 0;
 	while (i < args->philo_num)
 	{
-	//	printf("destroyed jetzt fork %d \n", i);
+		result = pthread_mutex_trylock(&fork[i]);
+		if (result == 0)
+			pthread_mutex_unlock(&fork[i]);
 		pthread_mutex_destroy(&fork[i]);
 		i++;
 	}

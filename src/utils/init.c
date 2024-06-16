@@ -6,7 +6,7 @@
 /*   By: hwiemann <hwiemann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:15:03 by hwiemann          #+#    #+#             */
-/*   Updated: 2024/06/16 13:25:58 by hwiemann         ###   ########.fr       */
+/*   Updated: 2024/06/16 14:36:34 by hwiemann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ long long	the_time()
 	return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
 }
 
-void	fork_mutex_init(pthread_mutex_t *fork, int philo_num)
+void	fork_mutex_init(pthread_mutex_t *fork, pthread_mutex_t *write_lock, int philo_num)
 {
 	int	i;
 
@@ -28,6 +28,7 @@ void	fork_mutex_init(pthread_mutex_t *fork, int philo_num)
 	while (i < philo_num)
 	{
 		pthread_mutex_init(&fork[i], NULL);
+		pthread_mutex_init(&write_lock[i], NULL);
 		i++;
 	}
 }
@@ -65,13 +66,13 @@ philo_args	*init_philo_args(pthread_mutex_t *forks, pthread_mutex_t *write_lock,
 		printf("malloc error \n");
 		return (NULL);
 	}
-	fork_mutex_init(forks, philo_num);
+	fork_mutex_init(forks, write_lock, philo_num);
 	start_time = the_time();
 	while (i < philo_num)
 	{
 		args[i].forks = forks;
-		args[i].id = i;
 		args[i].write_lock = write_lock;
+		args[i].id = i;
 		args[i].philo_num = philo_num;
 		args[i].time_to_die = (ft_atoi(argv[2]) * 1000 + 1);
 		args[i].time_to_eat = ft_atoi(argv[3]) * 1000;

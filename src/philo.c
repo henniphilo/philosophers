@@ -6,7 +6,7 @@
 /*   By: hwiemann <hwiemann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 11:27:37 by hwiemann          #+#    #+#             */
-/*   Updated: 2024/06/16 13:24:16 by hwiemann         ###   ########.fr       */
+/*   Updated: 2024/06/16 14:36:57 by hwiemann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ int	main(int argc, char **argv)
 			printf("Malloc Error \n");
 			return (1);
 		}
-		pthread_mutex_init(&write_lock, NULL);
 		args = init_philo_args(forks, &write_lock, argv);
 		if(!args)
 			return (1);
@@ -59,6 +58,7 @@ void		philo_threads(philo_args *args, pthread_t *philosophers)
 		free(args);
 		return ;
 	}
+	pthread_join(monitor, NULL);
 	wait_for_philos(philosophers, args);
 }
 
@@ -71,12 +71,17 @@ void	ft_exit(philo_args *args)
 	pthread_mutex_destroy(args->write_lock);
 	while (i < args->philo_num)
 	{
+		pthread_mutex_unlock(&args[i].meal_check_lock);
+		pthread_mutex_unlock(&args[i].last_meal_lock);
 		pthread_mutex_destroy(&args[i].meal_check_lock);
 		pthread_mutex_destroy(&args[i].last_meal_lock);
 		i++;
 	}
 	if (args->forks)
+	{
 		free(args->forks);
+		args->forks = NULL;
+	}
 	if (args)
 		free(args);
 	exit (0);
