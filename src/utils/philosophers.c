@@ -6,7 +6,7 @@
 /*   By: hwiemann <hwiemann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:04:25 by hwiemann          #+#    #+#             */
-/*   Updated: 2024/06/16 21:42:03 by hwiemann         ###   ########.fr       */
+/*   Updated: 2024/06/17 12:33:47 by hwiemann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,15 +26,17 @@ void	pick_up_fork (int id, int side, pthread_mutex_t *fork, philo_args *args)
 		// takes right
 		pthread_mutex_lock(&fork[(id + 1) % args->philo_num]); // % num makes it a round table
 		log_status(args, id, "has taken a fork");
-
 	}
 }
 
 void	drop_down_fork (int id, pthread_mutex_t *fork, philo_args *args)
 {
+	pthread_mutex_lock(&args->meal_check_lock);
+	args->fin_meal[id] = 0;
+	pthread_mutex_unlock(&args->meal_check_lock);
 	pthread_mutex_unlock(&fork[id]); // puts down left
 	pthread_mutex_unlock(&fork[(id + 1) % args->philo_num]); // % num makes it a round table
-	check_must_eat(args);
+	//check_must_eat(args);
 }
 
 void	*ft_philo (void *arg)
@@ -47,7 +49,7 @@ void	*ft_philo (void *arg)
 	id = args->id;
 	fork = args->forks;
 
-	while (1)
+	while (args->stop != 1)
 	{
 		think(id, args);
 		if (id % 2 == 0)
@@ -62,7 +64,6 @@ void	*ft_philo (void *arg)
 		}
 		eat(id, args);
 		sleepy(id, args);
-	//	check_must_eat(args);
 	}
 	return (NULL);
 }
@@ -74,7 +75,7 @@ void	*monitor_death(void *arg)
 	int			i;
 
 	args = (philo_args *)arg;
-	while (!args->stop)
+	while (args->stop != 1)
 	{
 		i = 0;
 		while (i < args->philo_num)
@@ -83,6 +84,7 @@ void	*monitor_death(void *arg)
 			if((1000 * (the_time() - args[i].last_meal_time)) > args[i].time_to_die)
 			{
 				log_status(&args[i], i, "died");
+				pthread_mutex_unlock(&args[i].last_meal_lock);
 				args->stop = 1;
 				ft_exit(args);
 			}

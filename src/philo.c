@@ -6,7 +6,7 @@
 /*   By: hwiemann <hwiemann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 11:27:37 by hwiemann          #+#    #+#             */
-/*   Updated: 2024/06/16 21:49:20 by hwiemann         ###   ########.fr       */
+/*   Updated: 2024/06/17 13:14:08 by hwiemann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,32 +76,31 @@ void		philo_threads(philo_args *args)
 		return ;
 	}
 	pthread_join(monitor, NULL);
-	//wait_for_philos(philosophers, args);
+	wait_for_philos(args);
 }
 
 void	ft_exit(philo_args *args)
 {
 	int	i;
-	// int	test_a;
-	// int	test_b;
 
 	i = 0;
 	args->stop = 1;
-	wait_for_philos(args); //philosopher join
-	destroy_forks(args->forks, args);
-	pthread_mutex_destroy(args->write_lock);
+	//wait_for_philos(args); //philosopher join
 	while (i < args->philo_num)
 	{
-		// test_a = pthread_mutex_trylock(&args[i].meal_check_lock);
-		// if (test_a == 0)
-		pthread_mutex_unlock(&args[i].meal_check_lock);
+		if (pthread_mutex_lock(&args[i].meal_check_lock) == 0)
+			pthread_mutex_unlock(&args[i].meal_check_lock);
 		pthread_mutex_destroy(&args[i].meal_check_lock);
-		// test_b = pthread_mutex_trylock(&args[i].last_meal_lock);
-		// if (test_b == 0)
-		pthread_mutex_unlock(&args[i].last_meal_lock);
+		if (pthread_mutex_lock(&args[i].last_meal_lock) == 0)
+			pthread_mutex_unlock(&args[i].last_meal_lock);
 		pthread_mutex_destroy(&args[i].last_meal_lock);
+		if (pthread_mutex_lock(&args[i].fin_meal_lock) == 0)
+			pthread_mutex_unlock(&args[i].fin_meal_lock);
+		pthread_mutex_destroy(&args[i].fin_meal_lock);
 		i++;
 	}
+	destroy_forks(args->forks, args);
+	pthread_mutex_destroy(&args->write_lock);
 	if (args->forks)
 	{
 		free(args->forks);

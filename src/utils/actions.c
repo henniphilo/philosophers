@@ -6,7 +6,7 @@
 /*   By: hwiemann <hwiemann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:13:52 by hwiemann          #+#    #+#             */
-/*   Updated: 2024/06/16 20:46:26 by hwiemann         ###   ########.fr       */
+/*   Updated: 2024/06/17 13:01:45 by hwiemann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,9 @@ void	eat(int philosopher, philo_args *args)
 	pthread_mutex_lock(&args->meal_check_lock);
 	args->meal_eaten += 1;
 	pthread_mutex_unlock(&args->meal_check_lock);
+	pthread_mutex_lock(&args->fin_meal_lock);
+	args->fin_meal[philosopher] = 1;
+	pthread_mutex_unlock(&args->fin_meal_lock);
 	log_status(args, philosopher, "is eating");
 	usleep(args->time_to_eat);
 	drop_down_fork(philosopher, args->forks, args);
@@ -34,6 +37,7 @@ void	eat(int philosopher, philo_args *args)
 void	sleepy(int philosopher, philo_args *args)
 {
 	log_status(args, philosopher, "is sleeping");
+	check_must_eat(args);
 	usleep(args->time_to_sleep);
 }
 
