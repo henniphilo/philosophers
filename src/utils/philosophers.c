@@ -6,7 +6,7 @@
 /*   By: hwiemann <hwiemann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:04:25 by hwiemann          #+#    #+#             */
-/*   Updated: 2024/06/18 14:20:24 by hwiemann         ###   ########.fr       */
+/*   Updated: 2024/06/18 16:12:53 by hwiemann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,6 @@ void	pick_up_fork (int id, int side, pthread_mutex_t *fork, philo_args *args)
 
 void	drop_down_fork (int id, pthread_mutex_t *fork, philo_args *args)
 {
-	pthread_mutex_lock(&args->meal_check_lock);
-//	args->fin_meal[id] = 0;
-	pthread_mutex_unlock(&args->meal_check_lock);
 	pthread_mutex_unlock(&fork[id]); // puts down left
 	pthread_mutex_unlock(&fork[(id + 1) % args->philo_num]); // % num makes it a round table
 	//check_must_eat(args);
@@ -49,7 +46,7 @@ void	*ft_philo (void *arg)
 	id = args->id;
 	fork = args->forks;
 
-	while (args->info->stop != 1)
+	while (1)
 	{
 		if(stop_check(args) != 1)
 		{
@@ -79,6 +76,8 @@ void	*ft_philo (void *arg)
 			eat(id, args);
 			sleepy(id, args);
 		}
+		else
+			return (NULL);
 	}
 	return (NULL);
 }
@@ -90,37 +89,36 @@ void	*monitor_death(void *arg)
 	int			i;
 
 	args = (philo_args *)arg;
-	while (args->info->stop != 1)
+	while (1)
 	{
 		i = 0;
 		while (i < args->philo_num)
 		{
 			if(stop_check(args) == 1)
 			{
-				pthread_mutex_lock(&args->write_lock);
-				printf(">stop_check exit< stop ist gerade %d\n", args->info->stop);
-				pthread_mutex_unlock(&args->write_lock);
+				// pthread_mutex_lock(&args->info->write_lock);
+				// printf(">stop_check exit< stop ist gerade %d\n", args->info->stop);
+				// pthread_mutex_unlock(&args->info->write_lock);
 				ft_exit(args);
 			}
 			pthread_mutex_lock(&args[i].last_meal_lock);
-			if((1000 * (the_time() - args[i].last_meal_time)) > args->info->time_to_die)
+			if((1000 * (the_time() - args[i].last_meal_time)) > args->time_to_die)
 			{
 				log_status(&args[i], i, "died");
 				pthread_mutex_unlock(&args[i].last_meal_lock);
-				pthread_mutex_lock(&args->stop_lock);
+				pthread_mutex_lock(&args->info->stop_lock);
 				args->info->stop = 1;
-				pthread_mutex_unlock(&args->stop_lock);
-				pthread_mutex_lock(&args->write_lock);
-				printf(">tot< stop ist gerade %d\n", args->info->stop);
-				pthread_mutex_unlock(&args->write_lock);
+				pthread_mutex_unlock(&args->info->stop_lock);
+				// pthread_mutex_lock(&args->info->write_lock);
+				// printf(">tot< stop ist gerade %d\n", args->info->stop);
+				// pthread_mutex_unlock(&args->info->write_lock);
 				ft_exit(args);
 				//break ;
 			}
-			else
-				pthread_mutex_unlock(&args[i].last_meal_lock);
+			pthread_mutex_unlock(&args[i].last_meal_lock);
 			i++;
 		}
-	//	check_must_eat(args); // verursacht mehr probleme
+		check_must_eat(args); // verursacht mehr probleme
 		usleep(1000); //to sleep 1ms before checking again
 	}
 	return (NULL);
@@ -128,12 +126,12 @@ void	*monitor_death(void *arg)
 
 int	stop_check(philo_args *args)
 {
-	pthread_mutex_lock(&args->stop_lock);
+	pthread_mutex_lock(&args->info->stop_lock);
 	if (args->info->stop == 1)
 	{
-		pthread_mutex_unlock(&args->stop_lock);
+		pthread_mutex_unlock(&args->info->stop_lock);
 		return (1);
 	}
-	pthread_mutex_unlock(&args->stop_lock);
+	pthread_mutex_unlock(&args->info->stop_lock);
 	return (0);
 }

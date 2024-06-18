@@ -6,7 +6,7 @@
 /*   By: hwiemann <hwiemann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 11:28:02 by hwiemann          #+#    #+#             */
-/*   Updated: 2024/06/18 14:16:10 by hwiemann         ###   ########.fr       */
+/*   Updated: 2024/06/18 16:06:00 by hwiemann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,14 +22,18 @@
 # include <stdlib.h>
 
 typedef struct {
-	int				time_to_eat;
-	int				time_to_sleep;
-	int				time_to_die;
-	int				must_eat;
 	int				stop; //if programm endet to check for the monitor / philo routine
+	pthread_mutex_t	write_lock;
+	pthread_mutex_t	stop_lock;
+	// pthread_mutex_t	meal_check_lock;
 } philo_info;
 
 typedef struct {
+	int				must_eat;
+	int				time_to_eat;
+	int				time_to_sleep;
+	int				time_to_die;
+	pthread_mutex_t	last_meal_lock;
 	int				id;
 	int				philo_num;
 	int				meal_eaten;
@@ -38,10 +42,6 @@ typedef struct {
 	philo_info		*info;
 	pthread_t		*philosophers;
 	pthread_mutex_t	*forks;
-	pthread_mutex_t	write_lock;
-	pthread_mutex_t	meal_check_lock;
-	pthread_mutex_t	stop_lock;
-	pthread_mutex_t	last_meal_lock;
 } philo_args;
 
 
@@ -49,6 +49,7 @@ int			ft_atoi(const char *str);
 int			create_philos(pthread_t	*philosoph, philo_args *args);
 int			wait_for_philos(philo_args *args);
 int			stop_check(philo_args *args);
+int			ft_strcmp(const char *s1, const char *s2);
 
 void		check_must_eat(philo_args *args);
 void		*ft_philo(void *arg);

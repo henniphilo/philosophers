@@ -6,7 +6,7 @@
 /*   By: hwiemann <hwiemann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:20:55 by hwiemann          #+#    #+#             */
-/*   Updated: 2024/06/18 14:20:14 by hwiemann         ###   ########.fr       */
+/*   Updated: 2024/06/18 15:51:05 by hwiemann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,16 +37,35 @@ int		ft_atoi(const char *str)
 	}
 	return (sign * result);
 }
+
+
+int	ft_strcmp(const char *s1, const char *s2)
+{
+	size_t	i;
+
+	i = 0;
+	while (s1[i] != '\0' || s2[i] != '\0')
+	{
+		if ((unsigned char)s1[i] != (unsigned char)s2[i])
+			break ;
+		i++;
+	}
+	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
+}
 // logs time and state of philos
 // uses mutex to not mix up other outputgf
 void	log_status(philo_args *args, int id, const char *status)
 {
 	long long	time;
+	static int	flag = 0;
 
-	pthread_mutex_lock(&args->write_lock);
+	pthread_mutex_lock(&args->info->write_lock);
 	time = the_time() - args->start_time;
-	printf("%lld %d %s\n", time, id + 1, status);
-	pthread_mutex_unlock(&args->write_lock);
+	if (flag == 0)
+		printf("%lld %d %s\n", time, id + 1, status);
+	if (ft_strcmp(status, "died") == 0)
+		flag = 1;
+	pthread_mutex_unlock(&args->info->write_lock);
 }
 
 int	wait_for_philos(philo_args *args)
