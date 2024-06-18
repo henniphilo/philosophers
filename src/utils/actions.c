@@ -6,7 +6,7 @@
 /*   By: hwiemann <hwiemann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:13:52 by hwiemann          #+#    #+#             */
-/*   Updated: 2024/06/18 16:13:43 by hwiemann         ###   ########.fr       */
+/*   Updated: 2024/06/18 17:44:34 by hwiemann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,10 @@ void	think(int philosopher, philo_args *args)
 
 void	eat(int philosopher, philo_args *args)
 {
-	pthread_mutex_lock(&args->last_meal_lock);
+	pthread_mutex_lock(&args->info->last_meal_lock);
 	args->last_meal_time = the_time();
 	args->meal_eaten += 1;
-	pthread_mutex_unlock(&args->last_meal_lock);
+	pthread_mutex_unlock(&args->info->last_meal_lock);
 	//pthread_mutex_lock(&args->meal_check_lock);
 	//pthread_mutex_unlock(&args->meal_check_lock);
 	log_status(args, philosopher, "is eating");
@@ -50,15 +50,15 @@ void	check_must_eat(philo_args *args)
 		while (i < args->philo_num)
 		{
 			//pthread_mutex_lock(&args[i].meal_check_lock);
-			pthread_mutex_lock(&args[i].last_meal_lock);
+			pthread_mutex_lock(&args->info->last_meal_lock);
 			if (args[i].meal_eaten < args->must_eat)
 			{
 				meals_eaten = 0;
-				pthread_mutex_unlock(&args[i].last_meal_lock);
+				pthread_mutex_unlock(&args->info->last_meal_lock);
 				break ;
 			}
 		//	pthread_mutex_unlock(&args[i].meal_check_lock);
-			pthread_mutex_unlock(&args[i].last_meal_lock);
+			pthread_mutex_unlock(&args->info->last_meal_lock);
 			i++;
 		}
 		if (meals_eaten)

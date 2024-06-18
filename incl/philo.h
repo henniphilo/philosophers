@@ -6,7 +6,7 @@
 /*   By: hwiemann <hwiemann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 11:28:02 by hwiemann          #+#    #+#             */
-/*   Updated: 2024/06/18 16:06:00 by hwiemann         ###   ########.fr       */
+/*   Updated: 2024/06/18 17:42:39 by hwiemann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ typedef struct {
 	int				stop; //if programm endet to check for the monitor / philo routine
 	pthread_mutex_t	write_lock;
 	pthread_mutex_t	stop_lock;
+	pthread_mutex_t	last_meal_lock;
 	// pthread_mutex_t	meal_check_lock;
 } philo_info;
 
@@ -33,7 +34,6 @@ typedef struct {
 	int				time_to_eat;
 	int				time_to_sleep;
 	int				time_to_die;
-	pthread_mutex_t	last_meal_lock;
 	int				id;
 	int				philo_num;
 	int				meal_eaten;
@@ -59,7 +59,7 @@ void		think(int philosopher, philo_args *args);
 void		sleepy(int philosopher, philo_args *args);
 void		pick_up_fork (int id, int side, pthread_mutex_t *fork, philo_args *args);
 void		drop_down_fork (int id, pthread_mutex_t *fork, philo_args *args);
-void		fork_mutex_init(pthread_mutex_t *fork, pthread_mutex_t *write_lock, int philo_num);
+void		fork_mutex_init(pthread_mutex_t *fork, int philo_num);
 void		destroy_forks(pthread_mutex_t *fork, philo_args *args);
 //void		check_fin_meal(philo_args *args);
 void		log_status(philo_args *args, int id, const char *status);

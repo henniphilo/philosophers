@@ -6,7 +6,7 @@
 /*   By: hwiemann <hwiemann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:04:25 by hwiemann          #+#    #+#             */
-/*   Updated: 2024/06/18 16:12:53 by hwiemann         ###   ########.fr       */
+/*   Updated: 2024/06/18 18:19:08 by hwiemann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,11 +101,11 @@ void	*monitor_death(void *arg)
 				// pthread_mutex_unlock(&args->info->write_lock);
 				ft_exit(args);
 			}
-			pthread_mutex_lock(&args[i].last_meal_lock);
-			if((1000 * (the_time() - args[i].last_meal_time)) > args->time_to_die)
+			pthread_mutex_lock(&args->info->last_meal_lock);
+			if((1000 * (the_time() - args[i].last_meal_time)) >= args->time_to_die)
 			{
 				log_status(&args[i], i, "died");
-				pthread_mutex_unlock(&args[i].last_meal_lock);
+				pthread_mutex_unlock(&args->info->last_meal_lock);
 				pthread_mutex_lock(&args->info->stop_lock);
 				args->info->stop = 1;
 				pthread_mutex_unlock(&args->info->stop_lock);
@@ -115,7 +115,7 @@ void	*monitor_death(void *arg)
 				ft_exit(args);
 				//break ;
 			}
-			pthread_mutex_unlock(&args[i].last_meal_lock);
+			pthread_mutex_unlock(&args->info->last_meal_lock);
 			i++;
 		}
 		check_must_eat(args); // verursacht mehr probleme

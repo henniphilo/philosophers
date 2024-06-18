@@ -6,7 +6,7 @@
 /*   By: hwiemann <hwiemann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:15:03 by hwiemann          #+#    #+#             */
-/*   Updated: 2024/06/18 15:48:33 by hwiemann         ###   ########.fr       */
+/*   Updated: 2024/06/18 17:47:22 by hwiemann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ long long	the_time()
 	return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
 }
 
-void	fork_mutex_init(pthread_mutex_t *fork, pthread_mutex_t *write_lock, int philo_num)
+void	fork_mutex_init(pthread_mutex_t *fork, int philo_num)
 {
 	int	i;
 
@@ -30,7 +30,6 @@ void	fork_mutex_init(pthread_mutex_t *fork, pthread_mutex_t *write_lock, int phi
 		pthread_mutex_init(&fork[i], NULL);
 		i++;
 	}
-	pthread_mutex_init(write_lock, NULL);
 }
 
 int	create_philos(pthread_t	*philosoph, philo_args *args)
@@ -56,6 +55,7 @@ philo_args	*init_philo_args(pthread_mutex_t *forks, pthread_mutex_t *write_lock,
 	int			i;
 	philo_args	*args;
 	philo_info	*info;
+	//pthread_mutex_t	last_meal_lock;
 	int			philo_num;
 	long long	start_time;
 
@@ -78,7 +78,9 @@ philo_args	*init_philo_args(pthread_mutex_t *forks, pthread_mutex_t *write_lock,
 	start_time = the_time();
 	info->write_lock = *write_lock;
 	pthread_mutex_init(&(info->stop_lock), NULL);
-	fork_mutex_init(forks, write_lock, philo_num);
+	pthread_mutex_init(write_lock, NULL);
+	fork_mutex_init(forks, philo_num);
+	pthread_mutex_init(&(info->last_meal_lock), NULL);
 	i = 0;
 	while (i < philo_num)
 	{
@@ -97,7 +99,6 @@ philo_args	*init_philo_args(pthread_mutex_t *forks, pthread_mutex_t *write_lock,
 		args[i].last_meal_time = start_time;
 		args[i].start_time = start_time;
 		// pthread_mutex_init(&args[i].meal_check_lock, NULL);
-		pthread_mutex_init(&args[i].last_meal_lock, NULL);
 		i++;
 	}
 	return (args);
