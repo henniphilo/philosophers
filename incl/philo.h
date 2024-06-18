@@ -6,7 +6,7 @@
 /*   By: hwiemann <hwiemann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 11:28:02 by hwiemann          #+#    #+#             */
-/*   Updated: 2024/06/18 11:45:30 by hwiemann         ###   ########.fr       */
+/*   Updated: 2024/06/18 14:16:10 by hwiemann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,17 +22,20 @@
 # include <stdlib.h>
 
 typedef struct {
-	int				id;
-	int				philo_num;
 	int				time_to_eat;
 	int				time_to_sleep;
 	int				time_to_die;
 	int				must_eat;
-	int				meal_eaten;
 	int				stop; //if programm endet to check for the monitor / philo routine
-//	int				*fin_meal; //to check who still needs to unlock forks in case of death of the others
+} philo_info;
+
+typedef struct {
+	int				id;
+	int				philo_num;
+	int				meal_eaten;
 	long long		start_time;
 	long long		last_meal_time;
+	philo_info		*info;
 	pthread_t		*philosophers;
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	write_lock;

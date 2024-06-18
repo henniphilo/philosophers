@@ -6,7 +6,7 @@
 /*   By: hwiemann <hwiemann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:04:25 by hwiemann          #+#    #+#             */
-/*   Updated: 2024/06/18 13:39:50 by hwiemann         ###   ########.fr       */
+/*   Updated: 2024/06/18 14:20:24 by hwiemann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	*ft_philo (void *arg)
 	id = args->id;
 	fork = args->forks;
 
-	while (args->stop != 1)
+	while (args->info->stop != 1)
 	{
 		if(stop_check(args) != 1)
 		{
@@ -90,7 +90,7 @@ void	*monitor_death(void *arg)
 	int			i;
 
 	args = (philo_args *)arg;
-	while (args->stop != 1)
+	while (args->info->stop != 1)
 	{
 		i = 0;
 		while (i < args->philo_num)
@@ -98,20 +98,20 @@ void	*monitor_death(void *arg)
 			if(stop_check(args) == 1)
 			{
 				pthread_mutex_lock(&args->write_lock);
-				printf(">stop_check exit< stop ist gerade %d\n", args->stop);
+				printf(">stop_check exit< stop ist gerade %d\n", args->info->stop);
 				pthread_mutex_unlock(&args->write_lock);
 				ft_exit(args);
 			}
 			pthread_mutex_lock(&args[i].last_meal_lock);
-			if((1000 * (the_time() - args[i].last_meal_time)) > args[i].time_to_die)
+			if((1000 * (the_time() - args[i].last_meal_time)) > args->info->time_to_die)
 			{
 				log_status(&args[i], i, "died");
 				pthread_mutex_unlock(&args[i].last_meal_lock);
 				pthread_mutex_lock(&args->stop_lock);
-				args->stop = 1;
+				args->info->stop = 1;
 				pthread_mutex_unlock(&args->stop_lock);
 				pthread_mutex_lock(&args->write_lock);
-				printf(">tot< stop ist gerade %d\n", args->stop);
+				printf(">tot< stop ist gerade %d\n", args->info->stop);
 				pthread_mutex_unlock(&args->write_lock);
 				ft_exit(args);
 				//break ;
@@ -129,7 +129,7 @@ void	*monitor_death(void *arg)
 int	stop_check(philo_args *args)
 {
 	pthread_mutex_lock(&args->stop_lock);
-	if (args->stop == 1)
+	if (args->info->stop == 1)
 	{
 		pthread_mutex_unlock(&args->stop_lock);
 		return (1);

@@ -6,7 +6,7 @@
 /*   By: hwiemann <hwiemann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 11:27:37 by hwiemann          #+#    #+#             */
-/*   Updated: 2024/06/18 13:36:55 by hwiemann         ###   ########.fr       */
+/*   Updated: 2024/06/18 14:30:31 by hwiemann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ void	ft_exit(philo_args *args)
 	i = 0;
 
 	pthread_mutex_lock(&args->stop_lock);
-	args->stop = 1;
+	args->info->stop = 1;
 	pthread_mutex_unlock(&args->stop_lock);
 //	wait_for_philos(args); //philosopher join
 	while (i < args->philo_num)

@@ -6,7 +6,7 @@
 /*   By: hwiemann <hwiemann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:15:03 by hwiemann          #+#    #+#             */
-/*   Updated: 2024/06/18 11:41:40 by hwiemann         ###   ########.fr       */
+/*   Updated: 2024/06/18 14:27:04 by hwiemann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ philo_args	*init_philo_args(pthread_mutex_t *forks, pthread_mutex_t *write_lock,
 {
 	int			i;
 	philo_args	*args;
+	philo_info	*info;
 	int			philo_num;
 	long long	start_time;
 
@@ -66,26 +67,34 @@ philo_args	*init_philo_args(pthread_mutex_t *forks, pthread_mutex_t *write_lock,
 		printf("malloc error \n");
 		return (NULL);
 	}
-	i = 0;
-	fork_mutex_init(forks, write_lock, philo_num);
+	info = malloc(sizeof(philo_info));
+	if (!info)
+	{
+		printf("malloc info error \n");
+		free (args);
+		return (NULL);
+	}
+	info->stop = 0;
+	info->time_to_die = (ft_atoi(argv[2]) * 1000);
+	info->time_to_eat = ft_atoi(argv[3]) * 1000;
+	info->time_to_sleep = ft_atoi(argv[4]) * 1000;
+	if (argv[5])
+		info->must_eat = ft_atoi(argv[5]);
+	else
+		info->must_eat = -1;
 	start_time = the_time();
-	args->stop = 0; // should be a general flag
+	fork_mutex_init(forks, write_lock, philo_num);
+	i = 0;
 	while (i < philo_num)
 	{
+		args[i].info = info;
 		args[i].forks = forks;
 		args[i].write_lock = *write_lock;
 		args[i].id = i;
 		args[i].philo_num = philo_num;
-		args[i].time_to_die = (ft_atoi(argv[2]) * 1000);
-		args[i].time_to_eat = ft_atoi(argv[3]) * 1000;
-		args[i].time_to_sleep = ft_atoi(argv[4]) * 1000;
 		args[i].meal_eaten = 0;
 		args[i].last_meal_time = start_time;
 		args[i].start_time = start_time;
-		if (argv[5])
-			args[i].must_eat = ft_atoi(argv[5]);
-		else
-			args[i].must_eat = -1;
 		pthread_mutex_init(&args[i].meal_check_lock, NULL);
 		pthread_mutex_init(&args[i].stop_lock, NULL);
 		pthread_mutex_init(&args[i].last_meal_lock, NULL);

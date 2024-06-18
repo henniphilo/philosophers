@@ -6,7 +6,7 @@
 /*   By: hwiemann <hwiemann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:20:55 by hwiemann          #+#    #+#             */
-/*   Updated: 2024/06/17 17:45:59 by hwiemann         ###   ########.fr       */
+/*   Updated: 2024/06/18 14:20:14 by hwiemann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,6 @@ void	destroy_forks(pthread_mutex_t *fork, philo_args *args)
 	int	i;
 
 	i = 0;
-//	check_fin_meal(args);
 	while (i < args->philo_num)
 	{
 		if (pthread_mutex_lock(&fork[i]) == 0)
@@ -80,20 +79,3 @@ void	destroy_forks(pthread_mutex_t *fork, philo_args *args)
 		i++;
 	}
 }
-
-// void	check_fin_meal(philo_args *args)
-// {
-// 	int		i;
-
-// 	i = 0;
-// 	pthread_mutex_lock(&args->fin_meal_lock);
-// 	while (i < args->philo_num)
-// 	{
-// 		if (args->fin_meal[i] == 1)
-// 		{
-// 			drop_down_fork(i, args->forks, args);
-// 		}
-// 		i++;
-// 	}
-// 	pthread_mutex_unlock(&args->fin_meal_lock);
-// }
