@@ -6,7 +6,7 @@
 /*   By: hwiemann <hwiemann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:15:03 by hwiemann          #+#    #+#             */
-/*   Updated: 2024/06/17 12:59:50 by hwiemann         ###   ########.fr       */
+/*   Updated: 2024/06/18 11:41:40 by hwiemann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,30 +56,22 @@ philo_args	*init_philo_args(pthread_mutex_t *forks, pthread_mutex_t *write_lock,
 	int			i;
 	philo_args	*args;
 	int			philo_num;
-	int			*fin_meal;
 	long long	start_time;
 
 	i = 0;
 	philo_num = ft_atoi(argv[1]);
 	args = malloc(sizeof(philo_args) * philo_num);
-	fin_meal = malloc(sizeof(int) * philo_num);
-	if (!args || !fin_meal)
+	if (!args)
 	{
 		printf("malloc error \n");
 		return (NULL);
 	}
-	while (i < philo_num)
-	{
-		fin_meal[i] = 0;
-		i++;
-	}
 	i = 0;
 	fork_mutex_init(forks, write_lock, philo_num);
 	start_time = the_time();
+	args->stop = 0; // should be a general flag
 	while (i < philo_num)
 	{
-		args[i].stop = 0;
-		args[i].fin_meal = fin_meal;
 		args[i].forks = forks;
 		args[i].write_lock = *write_lock;
 		args[i].id = i;
@@ -95,7 +87,7 @@ philo_args	*init_philo_args(pthread_mutex_t *forks, pthread_mutex_t *write_lock,
 		else
 			args[i].must_eat = -1;
 		pthread_mutex_init(&args[i].meal_check_lock, NULL);
-		pthread_mutex_init(&args[i].fin_meal_lock, NULL);
+		pthread_mutex_init(&args[i].stop_lock, NULL);
 		pthread_mutex_init(&args[i].last_meal_lock, NULL);
 		i++;
 	}

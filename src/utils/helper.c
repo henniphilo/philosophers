@@ -6,7 +6,7 @@
 /*   By: hwiemann <hwiemann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:20:55 by hwiemann          #+#    #+#             */
-/*   Updated: 2024/06/17 13:05:20 by hwiemann         ###   ########.fr       */
+/*   Updated: 2024/06/17 17:45:59 by hwiemann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,35 +69,31 @@ int	wait_for_philos(philo_args *args)
 void	destroy_forks(pthread_mutex_t *fork, philo_args *args)
 {
 	int	i;
-	// int	result;
 
 	i = 0;
-	check_fin_meal(args);
+//	check_fin_meal(args);
 	while (i < args->philo_num)
 	{
-		// result = pthread_mutex_trylock(&fork[i]);
-		// if (result == 0)
-		//pthread_mutex_unlock(&fork[i]);
+		if (pthread_mutex_lock(&fork[i]) == 0)
+			pthread_mutex_unlock(&fork[i]);
 		pthread_mutex_destroy(&fork[i]);
 		i++;
 	}
 }
-// if dead and not finished eating needs to unlock fotrk first needs flag
 
-void	check_fin_meal(philo_args *args)
-{
-	int		i;
+// void	check_fin_meal(philo_args *args)
+// {
+// 	int		i;
 
-	i = 0;
-	pthread_mutex_lock(&args->fin_meal_lock);
-	while (i < args->philo_num)
-	{
-		if (args->fin_meal[i] == 1)
-		{
-	//		printf("philo %d needs to drop fork \n", i + 1);
-			drop_down_fork(i, args->forks, args);
-		}
-		i++;
-	}
-	pthread_mutex_unlock(&args->fin_meal_lock);
-}
+// 	i = 0;
+// 	pthread_mutex_lock(&args->fin_meal_lock);
+// 	while (i < args->philo_num)
+// 	{
+// 		if (args->fin_meal[i] == 1)
+// 		{
+// 			drop_down_fork(i, args->forks, args);
+// 		}
+// 		i++;
+// 	}
+// 	pthread_mutex_unlock(&args->fin_meal_lock);
+// }
