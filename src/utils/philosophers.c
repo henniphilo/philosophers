@@ -6,34 +6,33 @@
 /*   By: hwiemann <hwiemann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:04:25 by hwiemann          #+#    #+#             */
-/*   Updated: 2024/06/19 15:39:39 by hwiemann         ###   ########.fr       */
+/*   Updated: 2024/06/19 15:46:14 by hwiemann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../incl/philo.h"
 
 // left fork has same index as philo , right chopstick is id + 1
+// &fork[(id + 1) % args->philo_num to have round table
 
 void	pick_up_fork (int id, int side, pthread_mutex_t *fork, philo_args *args)
 {
 	if (side == 0)
 	{
-		pthread_mutex_lock(&fork[id]); // takes left
+		pthread_mutex_lock(&fork[id]);
 		log_status(args, id, "has taken a fork");
 	}
 	else
 	{
-		// takes right
-		pthread_mutex_lock(&fork[(id + 1) % args->philo_num]); // % num makes it a round table
+		pthread_mutex_lock(&fork[(id + 1) % args->philo_num]);
 		log_status(args, id, "has taken a fork");
 	}
 }
 
 void	drop_down_fork (int id, pthread_mutex_t *fork, philo_args *args)
 {
-	pthread_mutex_unlock(&fork[id]); // puts down left
-	pthread_mutex_unlock(&fork[(id + 1) % args->philo_num]); // % num makes it a round table
-	//check_must_eat(args);
+	pthread_mutex_unlock(&fork[id]);
+	pthread_mutex_unlock(&fork[(id + 1) % args->philo_num]);
 }
 
 void	*ft_philo (void *arg)
@@ -63,9 +62,6 @@ void	*ft_philo (void *arg)
 				pick_up_fork(id, 1, fork, args);
 				pick_up_fork(id, 0, fork, args);
 			}
-
-			// if (id % 2 == 0)
-			// 	usleep(1000);
 			eat(id, args);
 			sleepy(id, args);
 		}
@@ -90,7 +86,6 @@ void	*monitor_death(void *arg)
 			if(stop_check(args) == 1)
 			{
 				return (NULL);
-				//ft_exit(args);
 			}
 			pthread_mutex_lock(&args->info->last_meal_lock);
 			if((1000 * (the_time() - args[i].last_meal_time)) >= args->time_to_die)
@@ -100,18 +95,13 @@ void	*monitor_death(void *arg)
 				pthread_mutex_lock(&args->info->stop_lock);
 				args->info->stop = 1;
 				pthread_mutex_unlock(&args->info->stop_lock);
-				// pthread_mutex_lock(&args->info->write_lock);
-				// printf(">tot< stop ist gerade %d\n", args->info->stop);
-				// pthread_mutex_unlock(&args->info->write_lock);
 				return (NULL);
-				//ft_exit(args);
-				//break ;
 			}
 			pthread_mutex_unlock(&args->info->last_meal_lock);
 			i++;
 		}
-		check_must_eat(args); // verursacht mehr probleme
-		usleep(1000); //to sleep 1ms before checking again
+		check_must_eat(args);
+		usleep(1000);
 	}
 	return (NULL);
 }
