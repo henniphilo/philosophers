@@ -6,7 +6,7 @@
 /*   By: hwiemann <hwiemann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 11:28:02 by hwiemann          #+#    #+#             */
-/*   Updated: 2024/06/18 17:42:39 by hwiemann         ###   ########.fr       */
+/*   Updated: 2024/06/19 14:13:27 by hwiemann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,14 +40,14 @@ typedef struct {
 	long long		start_time;
 	long long		last_meal_time;
 	philo_info		*info;
-	pthread_t		*philosophers;
+//	pthread_t		*philosophers;
 	pthread_mutex_t	*forks;
 } philo_args;
 
 
 int			ft_atoi(const char *str);
 int			create_philos(pthread_t	*philosoph, philo_args *args);
-int			wait_for_philos(philo_args *args);
+int			wait_for_philos(philo_args *args, pthread_t *philosophers);
 int			stop_check(philo_args *args);
 int			ft_strcmp(const char *s1, const char *s2);
 
@@ -64,11 +64,11 @@ void		destroy_forks(pthread_mutex_t *fork, philo_args *args);
 //void		check_fin_meal(philo_args *args);
 void		log_status(philo_args *args, int id, const char *status);
 void		ft_exit(philo_args *args);
-void		init_philosophers(philo_args *args, pthread_t *philosophers);
-void		philo_threads(philo_args *args);
+//void		init_philosophers(philo_args *args, pthread_t *philosophers);
+void		philo_threads(philo_args *args, pthread_t *philosophers);
 
 long long	the_time();
-philo_args	*init_philo_args(pthread_mutex_t *forks, pthread_mutex_t *write_lock, char **argv);
+philo_args	*init_philo_args(pthread_mutex_t *forks,  char **argv);
 
 
 # endif

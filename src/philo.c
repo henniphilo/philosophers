@@ -6,7 +6,7 @@
 /*   By: hwiemann <hwiemann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 11:27:37 by hwiemann          #+#    #+#             */
-/*   Updated: 2024/06/18 18:03:25 by hwiemann         ###   ########.fr       */
+/*   Updated: 2024/06/19 14:12:59 by hwiemann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ int	main(int argc, char **argv)
 
 		pthread_mutex_t	*forks;
 		pthread_t		*philosophers;
-		pthread_mutex_t	write_lock;
 		philo_args		*args;
 
 		forks = malloc(sizeof(pthread_mutex_t) * philo_num);
@@ -32,15 +31,10 @@ int	main(int argc, char **argv)
 			printf("Malloc Error \n");
 			return (1);
 		}
-		args = init_philo_args(forks, &write_lock, argv);
+		args = init_philo_args(forks, argv);
 		if(!args)
 			return (1);
-		for (int i = 0; i < philo_num; i++)
-		{
-			args[i].philosophers = philosophers;
-		}
-	//	init_philosophers(args, philosophers);
-		philo_threads(args);
+		philo_threads(args, philosophers);
 		ft_exit(args);
 	}
 	else
@@ -48,19 +42,8 @@ int	main(int argc, char **argv)
 	return (0);
 }
 
-void	init_philosophers(philo_args *args, pthread_t *philosophers)
-{
-	int		i;
 
-	i = 0;
-	while (i < args->philo_num)
-	{
-		args[i].philosophers = philosophers;
-	}
-}
-
-
-void		philo_threads(philo_args *args)
+void		philo_threads(philo_args *args, pthread_t *philosophers)
 {
 	pthread_t		monitor;
 
@@ -70,13 +53,13 @@ void		philo_threads(philo_args *args)
 		free(args);
 		return ;
 	}
-	if (create_philos(args->philosophers, args) != 0)
+	if (create_philos(philosophers, args) != 0)
 	{
 		free(args);
 		return ;
 	}
 	pthread_join(monitor, NULL);
-	//wait_for_philos(args);
+	wait_for_philos(args, philosophers); //philosopher join
 }
 
 void	ft_exit(philo_args *args)
@@ -88,7 +71,7 @@ void	ft_exit(philo_args *args)
 	pthread_mutex_lock(&args->info->stop_lock);
 	args->info->stop = 1;
 	pthread_mutex_unlock(&args->info->stop_lock);
-	wait_for_philos(args); //philosopher join
+	//wait_for_philos(args, philosophers); //philosopher join
 	while (i < args->philo_num)
 	{
 		if (pthread_mutex_lock(&args->info->last_meal_lock) == 0)
@@ -103,7 +86,7 @@ void	ft_exit(philo_args *args)
 		free(args->forks);
 		args->forks = NULL;
 	}
-	free(args->philosophers);
+//	free(args->philosophers);
 	free(args);
 	exit (0);
 }
