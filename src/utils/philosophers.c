@@ -6,7 +6,7 @@
 /*   By: hwiemann <hwiemann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:04:25 by hwiemann          #+#    #+#             */
-/*   Updated: 2024/06/18 18:19:08 by hwiemann         ###   ########.fr       */
+/*   Updated: 2024/06/19 15:39:39 by hwiemann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,28 +51,21 @@ void	*ft_philo (void *arg)
 		if(stop_check(args) != 1)
 		{
 			think(id, args);
+			if (args->philo_num == 1)
+				return (NULL);
 			if (id % 2 == 0)
 			{
-				// if(stop_check(args) == 1)
-				// {
-				// 	pthread_mutex_lock(&args->write_lock);
-				// 	printf("stop ist gerade %d\n", args->stop);
-				// 	pthread_mutex_unlock(&args->write_lock);
-				// }
 				pick_up_fork(id, 0, fork, args);
 				pick_up_fork(id, 1, fork, args);
 			}
 			else
 			 {
-			// 	if(stop_check(args) == 1)
-			// 	{
-			// 		pthread_mutex_lock(&args->write_lock);
-			// 		printf("stop ist gerade %d\n", args->stop);
-			// 		pthread_mutex_unlock(&args->write_lock);
-			// 	}
 				pick_up_fork(id, 1, fork, args);
 				pick_up_fork(id, 0, fork, args);
 			}
+
+			// if (id % 2 == 0)
+			// 	usleep(1000);
 			eat(id, args);
 			sleepy(id, args);
 		}
@@ -96,10 +89,8 @@ void	*monitor_death(void *arg)
 		{
 			if(stop_check(args) == 1)
 			{
-				// pthread_mutex_lock(&args->info->write_lock);
-				// printf(">stop_check exit< stop ist gerade %d\n", args->info->stop);
-				// pthread_mutex_unlock(&args->info->write_lock);
-				ft_exit(args);
+				return (NULL);
+				//ft_exit(args);
 			}
 			pthread_mutex_lock(&args->info->last_meal_lock);
 			if((1000 * (the_time() - args[i].last_meal_time)) >= args->time_to_die)
@@ -112,7 +103,8 @@ void	*monitor_death(void *arg)
 				// pthread_mutex_lock(&args->info->write_lock);
 				// printf(">tot< stop ist gerade %d\n", args->info->stop);
 				// pthread_mutex_unlock(&args->info->write_lock);
-				ft_exit(args);
+				return (NULL);
+				//ft_exit(args);
 				//break ;
 			}
 			pthread_mutex_unlock(&args->info->last_meal_lock);

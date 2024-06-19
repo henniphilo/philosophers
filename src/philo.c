@@ -6,7 +6,7 @@
 /*   By: hwiemann <hwiemann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 11:27:37 by hwiemann          #+#    #+#             */
-/*   Updated: 2024/06/19 14:12:59 by hwiemann         ###   ########.fr       */
+/*   Updated: 2024/06/19 15:04:13 by hwiemann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ void		philo_threads(philo_args *args, pthread_t *philosophers)
 	}
 	pthread_join(monitor, NULL);
 	wait_for_philos(args, philosophers); //philosopher join
+	ft_exit(args);
 }
 
 void	ft_exit(philo_args *args)
@@ -71,15 +72,23 @@ void	ft_exit(philo_args *args)
 	pthread_mutex_lock(&args->info->stop_lock);
 	args->info->stop = 1;
 	pthread_mutex_unlock(&args->info->stop_lock);
-	//wait_for_philos(args, philosophers); //philosopher join
-	while (i < args->philo_num)
-	{
-		if (pthread_mutex_lock(&args->info->last_meal_lock) == 0)
-			pthread_mutex_unlock(&args->info->last_meal_lock);
-		pthread_mutex_destroy(&args->info->last_meal_lock);
-		i++;
-	}
+//	wait_for_philos(args, philosophers); //philosopher join
+	// while (i < args->philo_num)
+	// {
+	// 	if (pthread_mutex_lock(&args->info->last_meal_lock) == 0)
+	// 		pthread_mutex_unlock(&args->info->last_meal_lock);
+	// 	pthread_mutex_destroy(&args->info->last_meal_lock);
+	// 	i++;
+	// }
+	if (pthread_mutex_lock(&args->info->last_meal_lock) == 0)
+		pthread_mutex_unlock(&args->info->last_meal_lock);
+	pthread_mutex_destroy(&args->info->last_meal_lock);
+	if (pthread_mutex_lock(&args->info->write_lock) == 0)
+			pthread_mutex_unlock(&args->info->write_lock);
 	pthread_mutex_destroy(&args->info->write_lock);
+	if (pthread_mutex_lock(&args->info->stop_lock) == 0)
+			pthread_mutex_unlock(&args->info->stop_lock);
+	pthread_mutex_destroy(&args->info->stop_lock);
 	destroy_forks(args->forks, args);
 	if (args->forks)
 	{
