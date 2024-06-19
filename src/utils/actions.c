@@ -6,7 +6,7 @@
 /*   By: hwiemann <hwiemann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:13:52 by hwiemann          #+#    #+#             */
-/*   Updated: 2024/06/19 15:46:34 by hwiemann         ###   ########.fr       */
+/*   Updated: 2024/06/19 16:46:37 by hwiemann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,27 @@ void	think(int philosopher, philo_args *args)
 	log_status(args, philosopher, "is thinking");
 	usleep(1000);
 }
+
+void	pick_up_fork (int id, int side, pthread_mutex_t *fork, philo_args *args)
+{
+	if (side == 0)
+	{
+		pthread_mutex_lock(&fork[id]);
+		log_status(args, id, "has taken a fork");
+	}
+	else
+	{
+		pthread_mutex_lock(&fork[(id + 1) % args->philo_num]);
+		log_status(args, id, "has taken a fork");
+	}
+}
+
+void	drop_down_fork (int id, pthread_mutex_t *fork, philo_args *args)
+{
+	pthread_mutex_unlock(&fork[id]);
+	pthread_mutex_unlock(&fork[(id + 1) % args->philo_num]);
+}
+
 
 void	eat(int philosopher, philo_args *args)
 {

@@ -6,7 +6,7 @@
 /*   By: hwiemann <hwiemann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 11:28:02 by hwiemann          #+#    #+#             */
-/*   Updated: 2024/06/19 15:46:55 by hwiemann         ###   ########.fr       */
+/*   Updated: 2024/06/19 16:53:42 by hwiemann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ void		destroy_forks(pthread_mutex_t *fork, philo_args *args);
 void		log_status(philo_args *args, int id, const char *status);
 void		ft_exit(philo_args *args);
 void		philo_threads(philo_args *args, pthread_t *philosophers);
+void		routine(philo_args	*args, pthread_mutex_t *fork, int id);
 
 long long	the_time();
 philo_args	*init_philo_args(pthread_mutex_t *forks,  char **argv);
