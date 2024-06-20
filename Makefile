@@ -8,7 +8,7 @@ MAIN = philo
 
 SRC_DIR = src
 UTILS_DIR = utils
-SRC = $(SRC_DIR)/philo.c $(SRC_DIR)/$(UTILS_DIR)/actions.c $(SRC_DIR)/$(UTILS_DIR)/helper.c $(SRC_DIR)/$(UTILS_DIR)/init.c $(SRC_DIR)/$(UTILS_DIR)/philosophers.c
+SRC = $(SRC_DIR)/philo.c $(SRC_DIR)/$(UTILS_DIR)/actions.c $(SRC_DIR)/$(UTILS_DIR)/helper.c $(SRC_DIR)/$(UTILS_DIR)/init.c $(SRC_DIR)/$(UTILS_DIR)/philosophers.c $(SRC_DIR)/$(UTILS_DIR)/monitor.c
 #		$(addsuffix .c, $(addprefix srcs/, $(MAIN)))
 #		$(addsuffix .c, $(addprefix srcs/utils/, $(UTILS))) \
 

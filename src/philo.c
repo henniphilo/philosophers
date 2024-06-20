@@ -6,24 +6,24 @@
 /*   By: hwiemann <hwiemann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 11:27:37 by hwiemann          #+#    #+#             */
-/*   Updated: 2024/06/19 15:48:05 by hwiemann         ###   ########.fr       */
+/*   Updated: 2024/06/20 11:32:15 by hwiemann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../incl/philo.h"
 
+//muss noch negativ protecten
 
 int	main(int argc, char **argv)
 {
+	pthread_mutex_t	*forks;
+	pthread_t		*philosophers;
+	t_args			*args;
+	int				philo_num;
+
 	if (argc == 5 || argc == 6)
 	{
-		int		philo_num;
 		philo_num = ft_atoi(argv[1]);
-
-		pthread_mutex_t	*forks;
-		pthread_t		*philosophers;
-		philo_args		*args;
-
 		forks = malloc(sizeof(pthread_mutex_t) * philo_num);
 		philosophers = malloc(sizeof(pthread_t) * philo_num);
 		if (!forks || !philosophers)
@@ -32,7 +32,7 @@ int	main(int argc, char **argv)
 			return (1);
 		}
 		args = init_philo_args(forks, argv);
-		if(!args)
+		if (!args)
 			return (1);
 		philo_threads(args, philosophers);
 		ft_exit(args);
@@ -42,10 +42,9 @@ int	main(int argc, char **argv)
 	return (0);
 }
 
-
-void		philo_threads(philo_args *args, pthread_t *philosophers)
+void	philo_threads(t_args *args, pthread_t *philosophers)
 {
-	pthread_t		monitor;
+	pthread_t	monitor;
 
 	if (pthread_create(&monitor, NULL, monitor_death, args) != 0)
 	{
@@ -63,7 +62,7 @@ void		philo_threads(philo_args *args, pthread_t *philosophers)
 	ft_exit(args);
 }
 
-void	ft_exit(philo_args *args)
+void	ft_exit(t_args *args)
 {
 	int	i;
 
@@ -75,10 +74,10 @@ void	ft_exit(philo_args *args)
 		pthread_mutex_unlock(&args->info->last_meal_lock);
 	pthread_mutex_destroy(&args->info->last_meal_lock);
 	if (pthread_mutex_lock(&args->info->write_lock) == 0)
-			pthread_mutex_unlock(&args->info->write_lock);
+		pthread_mutex_unlock(&args->info->write_lock);
 	pthread_mutex_destroy(&args->info->write_lock);
 	if (pthread_mutex_lock(&args->info->stop_lock) == 0)
-			pthread_mutex_unlock(&args->info->stop_lock);
+		pthread_mutex_unlock(&args->info->stop_lock);
 	pthread_mutex_destroy(&args->info->stop_lock);
 	destroy_forks(args->forks, args);
 	if (args->forks)

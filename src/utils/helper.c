@@ -6,13 +6,13 @@
 /*   By: hwiemann <hwiemann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:20:55 by hwiemann          #+#    #+#             */
-/*   Updated: 2024/06/19 15:47:07 by hwiemann         ###   ########.fr       */
+/*   Updated: 2024/06/20 11:34:03 by hwiemann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../incl/philo.h"
 
-int		ft_atoi(const char *str)
+int	ft_atoi(const char *str)
 {
 	int	sign;
 	int	result;
@@ -38,7 +38,6 @@ int		ft_atoi(const char *str)
 	return (sign * result);
 }
 
-
 int	ft_strcmp(const char *s1, const char *s2)
 {
 	size_t	i;
@@ -53,7 +52,7 @@ int	ft_strcmp(const char *s1, const char *s2)
 	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
 }
 
-void	log_status(philo_args *args, int id, const char *status)
+void	log_status(t_args *args, int id, const char *status)
 {
 	long long	time;
 	static int	flag = 0;
@@ -67,14 +66,14 @@ void	log_status(philo_args *args, int id, const char *status)
 	pthread_mutex_unlock(&args->info->write_lock);
 }
 
-int	wait_for_philos(philo_args *args, pthread_t *philosophers)
+int	wait_for_philos(t_args *args, pthread_t *philosophers)
 {
 	int	i;
 
 	i = 0;
 	while (i < args->philo_num)
 	{
-		if(pthread_join(philosophers[i], NULL) != 0)
+		if (pthread_join(philosophers[i], NULL) != 0)
 		{
 			printf("Error in joining threads\n");
 			return (1);
@@ -84,7 +83,7 @@ int	wait_for_philos(philo_args *args, pthread_t *philosophers)
 	return (0);
 }
 
-void	destroy_forks(pthread_mutex_t *fork, philo_args *args)
+void	destroy_forks(pthread_mutex_t *fork, t_args *args)
 {
 	int	i;
 
