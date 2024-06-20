@@ -6,13 +6,29 @@
 /*   By: hwiemann <hwiemann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 11:27:37 by hwiemann          #+#    #+#             */
-/*   Updated: 2024/06/20 11:32:15 by hwiemann         ###   ########.fr       */
+/*   Updated: 2024/06/20 13:01:37 by hwiemann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../incl/philo.h"
 
-//muss noch negativ protecten
+static int	valid_input(char **argv)
+{
+	int	i;
+
+	i = 1;
+	while (i < 5)
+	{
+		if (ft_atoi(argv[i]) == -1)
+			return (1);
+		i++;
+	}
+	if (argv[5] && ft_atoi(argv[5]) == -1)
+	{
+		return (1);
+	}
+	return (0);
+}
 
 int	main(int argc, char **argv)
 {
@@ -21,7 +37,7 @@ int	main(int argc, char **argv)
 	t_args			*args;
 	int				philo_num;
 
-	if (argc == 5 || argc == 6)
+	if ((argc == 5 || argc == 6) && (valid_input(argv) == 0))
 	{
 		philo_num = ft_atoi(argv[1]);
 		forks = malloc(sizeof(pthread_mutex_t) * philo_num);
